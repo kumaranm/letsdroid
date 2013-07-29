@@ -1,4 +1,4 @@
-package com.mk.example.firstapp;
+package com.mk.example.myfirstapp;
 
 import android.os.Bundle;
 import android.app.Activity;
