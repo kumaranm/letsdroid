@@ -3,11 +3,13 @@ package com.mk.example.myfirstapp;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 public class DisplayMessageActivity extends Activity {
 
@@ -15,7 +17,18 @@ public class DisplayMessageActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_display_message);
+		
+		//get Intent
+		Intent intent = getIntent();
+		String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
+		
+		
+		TextView textView = new TextView(this);
+		textView.setTextSize(40);
+		textView.setText(message);
+		
+		setContentView(textView);
+//		setContentView(R.layout.activity_display_message);//uses the xml file	
 		// Show the Up button in the action bar.
 		setupActionBar();
 	}
