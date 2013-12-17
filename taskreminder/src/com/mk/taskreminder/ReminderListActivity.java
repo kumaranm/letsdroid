@@ -106,6 +106,10 @@ public class ReminderListActivity extends ListActivity
 		case R.id.menu_insert:
 			createReminder();
 			return true;
+		case R.id.menu_settings:
+			Intent i = new Intent(this, TaskPreferences.class);
+			startActivity(i);
+			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}

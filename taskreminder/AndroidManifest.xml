@@ -30,13 +30,17 @@
             android:label="@string/app_name" />
 
         <receiver android:name="com.mk.taskreminder.OnAlarmReceiver" />
-        <receiver android:name="com.mk.taskreminder.OnBootReceiver">
+        <receiver android:name="com.mk.taskreminder.OnBootReceiver" >
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
 
         <service android:name="com.mk.taskreminder.ReminderService" />
+
+        <activity
+            android:name="com.mk.taskreminder.TaskPreferences"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

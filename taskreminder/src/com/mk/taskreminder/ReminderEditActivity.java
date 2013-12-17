@@ -4,16 +4,17 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.mk.taskreminder.R;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
@@ -60,7 +61,7 @@ public class ReminderEditActivity extends Activity
 		mRowId = savedInstanceState != null ? savedInstanceState.getLong(RemindersDBAdapter.KEY_ROWID) : null;
 
 		registerButtonListenersAndSetDefaultText();
-		
+
 		mDbHelper.open();
 		setRowIdFromIntent();
 		populateFields();
@@ -76,21 +77,15 @@ public class ReminderEditActivity extends Activity
 		}
 	}
 
-	/*@Override
-	protected void onPause()
-	{
-		super.onPause();
-		mDbHelper.close();
-	}*/
+	/*
+	 * @Override protected void onPause() { super.onPause(); mDbHelper.close();
+	 * }
+	 */
 
-	/*@Override
-	protected void onResume()
-	{
-		super.onResume();
-		mDbHelper.open();
-		setRowIdFromIntent();
-		populateFields();
-	}*/
+	/*
+	 * @Override protected void onResume() { super.onResume(); mDbHelper.open();
+	 * setRowIdFromIntent(); populateFields(); }
+	 */
 
 	private void populateFields()
 	{
@@ -116,6 +111,29 @@ public class ReminderEditActivity extends Activity
 			updateDateButtonText();
 			updateTimeButtonText();
 		}
+		else
+		{
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			String defaultTitleKey = getString(R.string.pref_task_title_key);
+			String defaultTimeKey = getString(R.string.pref_default_time_from_now_key);
+			String defaultTitle = prefs.getString(defaultTitleKey, "");
+			String defaultTime = prefs.getString(defaultTimeKey, "");
+			if (!"".equals(defaultTitle))
+			{
+				mTitleText.setText(defaultTitle);
+			}
+			if (!"".equals(defaultTime))
+			{
+				mCalendar.add(Calendar.MINUTE, Integer.parseInt(defaultTime));
+			}
+			
+			//below code updates the preference
+			/*Editor editor = prefs.edit();
+			editor.putString(defaultTitleKey, "default text");
+			editor.commit();*/
+		}
+		updateDateButtonText();
+		updateTimeButtonText();
 	}
 
 	@Override
