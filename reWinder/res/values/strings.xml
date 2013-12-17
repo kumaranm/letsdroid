@@ -1,0 +1,11 @@
+<resources>
+
+    <string name="app_name">reWinder</string>
+    <string name="no_reminders">You have no reminders set. \n Use the menu to setup reminders for missed events.</string>
+    <string name="side_menu_home">Home</string>
+    <string name="top_menu_home">Home</string>
+    <string name="top_menu_apps">Apps</string>
+    <string name="top_menu_contacts">Contacts</string>
+    <string name="action_settings">Settings</string>
+	
+</resources>
