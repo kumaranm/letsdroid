@@ -65,6 +65,11 @@ public class EventOperations {
 		db.delete(DatabaseWrapper.DATABASE_TABLE, DatabaseWrapper.KEY_ROWID + "=" + event.getId(), null);
 	}
 
+	public void deleteEvent(long id) {
+		Log.i("deleteEvent", "deleting event-" + id);
+		db.delete(DatabaseWrapper.DATABASE_TABLE, DatabaseWrapper.KEY_ROWID + "=" + id, null);
+	}
+
 	public List<Event> getAllEvents() {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, null, null, null, null, null);
