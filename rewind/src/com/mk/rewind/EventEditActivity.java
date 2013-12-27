@@ -31,7 +31,7 @@ public class EventEditActivity extends Activity
 	private static final int CONFIRM_CAPTURE_DIALOG = 1;
 	private static final int CONFIRM_DISCARD_DIALOG = 2;
 	private static final String DATE_FORMAT = "dd-MM-yyyy";
-	public static final String DATE_TIME_FORMAT = "yyyy-MM-dd kk:mm:ss";
+	public static final String DATE_TIME_FORMAT = "dd-MM-yyyy kk:mm:ss";
 	private EventOperations db;
 	private Long rowId;
 
@@ -76,7 +76,7 @@ public class EventEditActivity extends Activity
 			Event event = db.getEvent(rowId);
 			narrationText.setText(event.getNarration());
 			locationText.setText(event.getLocation());
-			SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DATE_FORMAT);
+			SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
 			Date date = null;
 
 			try
@@ -186,7 +186,7 @@ public class EventEditActivity extends Activity
 		}
 
 		setResult(RESULT_OK);
-		Toast.makeText(EventEditActivity.this, "Event capture", Toast.LENGTH_SHORT).show();
+		Toast.makeText(EventEditActivity.this, "Event captured", Toast.LENGTH_SHORT).show();
 		setContentView(R.layout.activity_event_list);
 		finish();
 	}
