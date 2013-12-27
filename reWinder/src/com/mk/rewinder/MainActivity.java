@@ -1,6 +1,7 @@
 package com.mk.rewinder;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -31,6 +32,13 @@ public class MainActivity extends Activity
 		switch (item.getItemId()) {
 		case R.id.home:
 			setContentView(R.layout.activity_main);
+			Intent i = new Intent(this, MainActivity.class);
+			startActivity(i);
+			return true;
+		case R.id.apps:
+//			setContentView(R.layout.activity_applist);
+			Intent i1 = new Intent(this, AppListActivity.class);
+			startActivity(i1);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

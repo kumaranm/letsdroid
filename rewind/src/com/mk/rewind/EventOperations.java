@@ -10,28 +10,34 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-public class EventOperations {
+public class EventOperations
+{
 
 	private DatabaseWrapper dbHelper;
 	private String[] TABLE_COLUMNS = { DatabaseWrapper.KEY_ROWID, DatabaseWrapper.KEY_NARRATION,
-			DatabaseWrapper.KEY_LOCATION, DatabaseWrapper.KEY_DATE_TIME };
+			DatabaseWrapper.KEY_LOCATION, DatabaseWrapper.KEY_DATE_TIME, DatabaseWrapper.KEY_DATE,
+			DatabaseWrapper.KEY_MONTH, DatabaseWrapper.KEY_YEAR };
 	private SQLiteDatabase db;
 
 	public EventOperations(Context ctx) {
 		dbHelper = new DatabaseWrapper(ctx);
 	}
 
-	public void open() throws SQLException {
+	public void open() throws SQLException
+	{
 		db = dbHelper.getWritableDatabase();
 	}
 
-	public void close() {
+	public void close()
+	{
 		dbHelper.close();
 	}
 
-	public Event createEvent(String desc, String location, String dateTime, int date, int month, int year) {
+	public Event createEvent(String narration, String location, String dateTime, int date, int month, int year)
+	{
+		Event event = null;
 		ContentValues values = new ContentValues();
-		values.put(DatabaseWrapper.KEY_NARRATION, desc);
+		values.put(DatabaseWrapper.KEY_NARRATION, narration);
 		values.put(DatabaseWrapper.KEY_LOCATION, location);
 		values.put(DatabaseWrapper.KEY_DATE_TIME, dateTime);
 		values.put(DatabaseWrapper.KEY_DATE, date);
@@ -42,14 +48,19 @@ public class EventOperations {
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ROWID + "=" + id,
 				null, null, null, null);
 
-		cursor.moveToFirst();
-		Event event = parseEvent(cursor);
+		if (cursor.getCount() > 0)
+		{
+			cursor.moveToFirst();
+			event = parseEvent(cursor);
+		}
 		cursor.close();
 		return event;
 	}
 
-	private Event parseEvent(Cursor cursor) {
-		Event event = new Event();
+	private Event parseEvent(Cursor cursor)
+	{
+		Event event = null;
+		event = new Event();
 		event.setId(cursor.getInt(cursor.getColumnIndex(DatabaseWrapper.KEY_ROWID)));
 		event.setNarration(cursor.getString(cursor.getColumnIndex(DatabaseWrapper.KEY_NARRATION)));
 		event.setLocation(cursor.getString(cursor.getColumnIndex(DatabaseWrapper.KEY_LOCATION)));
@@ -60,27 +71,61 @@ public class EventOperations {
 		return event;
 	}
 
-	public void deleteEvent(Event event) {
+	public void deleteEvent(Event event)
+	{
 		Log.i("deleteEvent", "deleting event-" + event.getId());
 		db.delete(DatabaseWrapper.DATABASE_TABLE, DatabaseWrapper.KEY_ROWID + "=" + event.getId(), null);
 	}
 
-	public void deleteEvent(long id) {
+	public void deleteEvent(long id)
+	{
 		Log.i("deleteEvent", "deleting event-" + id);
 		db.delete(DatabaseWrapper.DATABASE_TABLE, DatabaseWrapper.KEY_ROWID + "=" + id, null);
 	}
 
-	public List<Event> getAllEvents() {
+	public List<Event> getAllEvents()
+	{
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, null, null, null, null, null);
-		cursor.moveToFirst();
-		while (!cursor.isAfterLast()) {
-			Event event = parseEvent(cursor);
-			eventList.add(event);
-			cursor.moveToNext();
+		if (cursor.getCount() > 0)
+		{
+			cursor.moveToFirst();
+			while (!cursor.isAfterLast())
+			{
+				Event event = parseEvent(cursor);
+				eventList.add(event);
+				cursor.moveToNext();
+			}
 		}
 		cursor.close();
 		return eventList;
 	}
 
+	public Event getEvent(long id)
+	{
+		Event event = null;
+		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ROWID + "=" + id,
+				null, null, null, null);
+		if (cursor.getCount() > 0)
+		{
+			cursor.moveToFirst();
+			event = parseEvent(cursor);
+		}
+		cursor.close();
+		return event;
+	}
+
+	public boolean updateEvent(long id, String narration, String location, String dateTime, int date, int month,
+			int year)
+	{
+		ContentValues values = new ContentValues();
+		values.put(DatabaseWrapper.KEY_NARRATION, narration);
+		values.put(DatabaseWrapper.KEY_LOCATION, location);
+		values.put(DatabaseWrapper.KEY_DATE_TIME, dateTime);
+		values.put(DatabaseWrapper.KEY_DATE, date);
+		values.put(DatabaseWrapper.KEY_MONTH, month);
+		values.put(DatabaseWrapper.KEY_YEAR, year);
+		values.put(DatabaseWrapper.KEY_ATTACHMENT, 0);
+		return db.update(DatabaseWrapper.DATABASE_TABLE, values, DatabaseWrapper.KEY_ROWID + "=" + id, null) > 0;
+	}
 }

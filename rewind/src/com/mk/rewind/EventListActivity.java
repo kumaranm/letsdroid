@@ -12,18 +12,19 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class EventListActivity extends ListActivity {
+public class EventListActivity extends ListActivity
+{
 
 	private EventOperations db;
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event_list);
 
@@ -38,14 +39,35 @@ public class EventListActivity extends ListActivity {
 		fillData();
 	}
 
-	private void fillData() {
+	private void fillData()
+	{
 		List<Event> lst = db.getAllEvents();
-		ArrayAdapter<Event> adapter = new ArrayAdapter<Event>(this, R.layout.event_row, R.id.eventtext, lst);
-		setListAdapter(adapter);
+
+		// populateDummyData(lst);
+
+		if (lst.size() > 0)
+		{
+			EventArrayAdapter adapter = new EventArrayAdapter(this, lst);
+
+			setListAdapter(adapter);
+		}
+	}
+
+	private void populateDummyData(List<Event> lst)
+	{
+		for (int i = 0; i < 10; i++)
+		{
+			Event event = new Event();
+			event.setYear(200 + i);
+			event.setLocation("Chennai " + i);
+			event.setNarration("This is narration number " + i);
+			lst.add(event);
+		}
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	protected void onListItemClick(ListView l, View v, int position, long id)
+	{
 		super.onListItemClick(l, v, position, id);
 
 		Intent i = new Intent(this, EventEditActivity.class);
@@ -54,7 +76,8 @@ public class EventListActivity extends ListActivity {
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu)
+	{
 		// Inflate the menu; this adds items to the action bar if it is present.
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.rewind_menu, menu);
@@ -62,14 +85,16 @@ public class EventListActivity extends ListActivity {
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
+	{
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater mi = getMenuInflater();
 		mi.inflate(R.menu.rewind_longpress_menu, menu);
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+	public boolean onMenuItemSelected(int featureId, MenuItem item)
+	{
 		switch (item.getItemId()) {
 		case R.id.addevent:
 			createEvent();
@@ -82,20 +107,23 @@ public class EventListActivity extends ListActivity {
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void createEvent() {
+	private void createEvent()
+	{
 		Intent i = new Intent(this, EventEditActivity.class);
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
+	{
 		super.onActivityResult(requestCode, resultCode, intent);
 		// Reload the list here
 		fillData();
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item) {
+	public boolean onContextItemSelected(MenuItem item)
+	{
 		switch (item.getItemId()) {
 		case R.id.deleteevent:
 			// delete task

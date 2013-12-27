@@ -13,21 +13,21 @@
     <item
         android:id="@+id/home"
         android:title="@string/top_menu_home"
-        android:showAsAction="ifRoom">
+        android:showAsAction="always">
     </item>
     <item
         android:id="@+id/apps"
         android:title="@string/top_menu_apps"
-        android:showAsAction="ifRoom">
+        android:showAsAction="always">
     </item>
     <item
         android:id="@+id/contacts"
         android:title="@string/top_menu_contacts"
-        android:showAsAction="ifRoom">
+        android:showAsAction="always">
     </item>
     <item
-        android:id="@+id/action_settings"
-        android:showAsAction="ifRoom"
-        android:title="@string/action_settings"/>
+        android:id="@+id/settings"
+        android:showAsAction="always"
+        android:title="@string/top_menu_settings"/>
 
 </menu>
