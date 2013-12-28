@@ -18,8 +18,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class EventEditActivity extends Activity
-{
+public class EventEditActivity extends Activity {
 
 	private Button dateButton;
 	private EditText narrationText;
@@ -36,8 +35,7 @@ public class EventEditActivity extends Activity
 	private Long rowId;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_event_modify);
@@ -60,31 +58,27 @@ public class EventEditActivity extends Activity
 		populateFields();
 	}
 
-	private void setRowIdFromIntent()
-	{
-		if (rowId == null)
-		{
+	private void setRowIdFromIntent() {
+		if (rowId == null) {
 			Bundle extras = getIntent().getExtras();
 			rowId = extras != null ? extras.getLong(DatabaseWrapper.KEY_ROWID) : null;
 		}
 	}
 
-	private void populateFields()
-	{
-		if (rowId != null)
-		{
+	private void populateFields() {
+		if (rowId != null) {
 			Event event = db.getEvent(rowId);
 			narrationText.setText(event.getNarration());
 			locationText.setText(event.getLocation());
+			discardButton.setText(R.string.event_cancel);
+			captureButton.setText(R.string.event_update);
 			SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
 			Date date = null;
 
-			try
-			{
+			try {
 				date = dateTimeFormat.parse(event.getDateTime());
 				calendar.setTime(date);
-			} catch (java.text.ParseException e)
-			{
+			} catch (java.text.ParseException e) {
 				Log.e(this.getLocalClassName(), e.getMessage(), e);
 			}
 			updateDateButtonText();
@@ -107,21 +101,17 @@ public class EventEditActivity extends Activity
 	}
 
 	@Override
-	protected void onSaveInstanceState(Bundle outState)
-	{
+	protected void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (rowId != null)
-		{
+		if (rowId != null) {
 			outState.putLong(DatabaseWrapper.KEY_ROWID, rowId);
 		}
 	}
 
-	private void registerButtonListenersAndSetDefaultText()
-	{
+	private void registerButtonListenersAndSetDefaultText() {
 		dateButton.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v)
-			{
+			public void onClick(View v) {
 				showDialog(DATE_PICKER_DIALOG);
 			}
 		});
@@ -130,8 +120,7 @@ public class EventEditActivity extends Activity
 		discardButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View arg0)
-			{
+			public void onClick(View arg0) {
 				showDialog(CONFIRM_DISCARD_DIALOG);
 
 			}
@@ -139,8 +128,7 @@ public class EventEditActivity extends Activity
 		captureButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
-			public void onClick(View arg0)
-			{
+			public void onClick(View arg0) {
 				showDialog(CONFIRM_CAPTURE_DIALOG);
 
 			}
@@ -148,8 +136,7 @@ public class EventEditActivity extends Activity
 	}
 
 	@Override
-	protected Dialog onCreateDialog(int id)
-	{
+	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DATE_PICKER_DIALOG:
 			return showDatePicker();
@@ -163,24 +150,25 @@ public class EventEditActivity extends Activity
 		return super.onCreateDialog(id);
 	}
 
-	private void saveState()
-	{
+	private void saveState() {
 		String narration = narrationText.getText().toString();
 		String location = locationText.getText().toString();
 		SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
-		String dateTime = dateTimeFormat.format(calendar.getTime());
 
-		if (rowId == null)
-		{
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.DATE, calendar.get(Calendar.DATE));
+		cal.set(Calendar.MONTH, calendar.get(Calendar.MONTH));
+		cal.set(Calendar.YEAR, calendar.get(Calendar.YEAR));
+
+		String dateTime = dateTimeFormat.format(cal.getTime());
+
+		if (rowId == null) {
 			Event event = db.createEvent(narration, location, dateTime, calendar.get(Calendar.DATE),
 					calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
-			if (event != null)
-			{
+			if (event != null) {
 				rowId = (long) event.getId();
 			}
-		}
-		else
-		{
+		} else {
 			db.updateEvent(rowId, narration, location, dateTime, calendar.get(Calendar.DATE),
 					calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
 		}
@@ -191,14 +179,12 @@ public class EventEditActivity extends Activity
 		finish();
 	}
 
-	private DatePickerDialog showDatePicker()
-	{
+	private DatePickerDialog showDatePicker() {
 		DatePickerDialog datePicker = new DatePickerDialog(EventEditActivity.this,
 				new DatePickerDialog.OnDateSetListener() {
 
 					@Override
-					public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth)
-					{
+					public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
 						calendar.set(Calendar.YEAR, year);
 						calendar.set(Calendar.MONTH, monthOfYear);
 						calendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -208,32 +194,28 @@ public class EventEditActivity extends Activity
 		return datePicker;
 	}
 
-	private void updateDateButtonText()
-	{
+	private void updateDateButtonText() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(DATE_FORMAT);
 		String dateForButton = dateFormat.format(calendar.getTime());
 		dateButton.setText(dateForButton);
 	}
 
-	private void showConfirmDiscard()
-	{
+	private void showConfirmDiscard() {
 		AlertDialog.Builder builder = new AlertDialog.Builder(EventEditActivity.this);
-		builder.setMessage("Discard event?").setTitle("Confirm action").setCancelable(false)
-				.setPositiveButton("Discard", new DialogInterface.OnClickListener() {
+		builder.setMessage(R.string.confirm_discard_message).setTitle(R.string.confirm_discard_title)
+				.setCancelable(false).setPositiveButton(R.string.event_okay, new DialogInterface.OnClickListener() {
 
 					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
+					public void onClick(DialogInterface dialog, int which) {
 						setResult(RESULT_OK);
 						Toast.makeText(EventEditActivity.this, "Event discarded", Toast.LENGTH_SHORT).show();
 						setContentView(R.layout.activity_event_list);
 						finish();
 					}
-				}).setNegativeButton("Go back", new DialogInterface.OnClickListener() {
+				}).setNegativeButton(R.string.event_go_back, new DialogInterface.OnClickListener() {
 
 					@Override
-					public void onClick(DialogInterface dialog, int which)
-					{
+					public void onClick(DialogInterface dialog, int which) {
 						setResult(RESULT_CANCELED);
 						// Toast.makeText(EventEditActivity.this, "Not saved",
 						// Toast.LENGTH_SHORT).show();
@@ -243,34 +225,29 @@ public class EventEditActivity extends Activity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		// getMenuInflater().inflate(R.menu.reminder_edit, menu);
 		return true;
 	}
 
 	@Override
-	protected void onDestroy()
-	{
+	protected void onDestroy() {
 		super.onDestroy();
 	}
 
 	@Override
-	protected void onRestart()
-	{
+	protected void onRestart() {
 		super.onRestart();
 	}
 
 	@Override
-	protected void onStop()
-	{
+	protected void onStop() {
 		super.onStop();
 	}
 
 	@Override
-	protected void onStart()
-	{
+	protected void onStart() {
 		super.onStart();
 	}
 }

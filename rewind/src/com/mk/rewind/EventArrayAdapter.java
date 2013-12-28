@@ -1,16 +1,19 @@
 package com.mk.rewind;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
-public class EventArrayAdapter extends BaseAdapter implements OnClickListener
+public class EventArrayAdapter extends BaseAdapter
 {
 	private Context context;
 	private final List<Event> eventList;
@@ -45,8 +48,24 @@ public class EventArrayAdapter extends BaseAdapter implements OnClickListener
 			convertView = inflater.inflate(R.layout.event_row_full, null);
 		}
 		TextView year = (TextView) convertView.findViewById(R.id.year);
-		year.setText(String.valueOf(entry.getYear()));
-
+		
+		SimpleDateFormat dateTimeFormat = new SimpleDateFormat(EventEditActivity.DATE_TIME_FORMAT);
+		Date date = null;
+		Calendar cal = Calendar.getInstance();
+		try
+		{
+			date = dateTimeFormat.parse(entry.getDateTime());
+			cal.setTime(date);
+		} catch (java.text.ParseException e)
+		{
+			Log.e("EventArrayAdapter", e.getMessage(), e);
+		}
+		
+		String str = String.valueOf(entry.getYear()) + "\n" + new SimpleDateFormat("MMM").format(cal.getTime())
+				+ "\n" + String.valueOf(entry.getDate());
+		//year.setText(String.valueOf(entry.getYear()));
+		year.setText(str);
+		
 		TextView location = (TextView) convertView.findViewById(R.id.location);
 		location.setText(entry.getLocation());
 
@@ -82,10 +101,5 @@ public class EventArrayAdapter extends BaseAdapter implements OnClickListener
 	{
 		return eventList.get(position).getId();
 	}
-
-	@Override
-	public void onClick(View arg0)
-	{
-
-	}
+	
 }

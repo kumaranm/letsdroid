@@ -21,8 +21,9 @@
             android:id="@+id/narrationtext"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="top"
+            android:gravity="top"
             android:inputType="textMultiLine"
+            android:maxLines="5"
             android:minLines="5"
             android:scrollHorizontally="false"
             android:scrollbarStyle="insideInset"
@@ -77,6 +78,7 @@
                 android:minWidth="70sp"
                 android:padding="5dp"
                 android:text="@string/discard_button"
+                android:textAppearance="?android:attr/textAppearanceButton"
                 android:textSize="20sp" />
 
             <Button
@@ -87,6 +89,7 @@
                 android:layout_weight="1"
                 android:padding="5dp"
                 android:text="@string/capture_button"
+                android:textAppearance="?android:attr/textAppearanceButton"
                 android:textSize="20sp" />
         </LinearLayout>
     </LinearLayout>

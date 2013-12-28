@@ -8,7 +8,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
 
 	private static final String DATABASE_NAME = "events.db";
 	public static final String DATABASE_TABLE = "events";
-	private static final int DATABASE_VERSION = 1;
+	private static final int DATABASE_VERSION = 2;
 
 	public static final String KEY_NARRATION = "narration";
 	public static final String KEY_LOCATION = "location";
@@ -18,6 +18,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
 	public static final String KEY_YEAR = "year";
 	public static final String KEY_ATTACHMENT = "attachment_id";
 	public static final String KEY_ROWID = "_id";
+	public static final String KEY_ARCHIVED = "archived";
 
 	private static final String DATABASE_CREATE;
 
@@ -31,6 +32,7 @@ public class DatabaseWrapper extends SQLiteOpenHelper {
 				.append(KEY_DATE).append(" integer, ").append(KEY_MONTH)
 				.append(" integer, ").append(KEY_YEAR).append(" integer, ")
 				.append(KEY_DATE_TIME).append(" text not null, ")
+				.append(KEY_ARCHIVED).append(" integer, ")
 				.append(KEY_ATTACHMENT).append(" integer ").append(" );");
 		DATABASE_CREATE = sb.toString();
 	}

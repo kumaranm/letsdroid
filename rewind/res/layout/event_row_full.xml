@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-     >
+    android:layout_height="fill_parent" >
 
     <TextView
         android:id="@+id/year"
@@ -11,15 +10,17 @@
         android:layout_alignBottom="@+id/narration"
         android:layout_alignParentTop="true"
         android:hint="@string/row_year_hint"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/year"
-        android:hint="@string/row_location_hint" />
+        android:hint="@string/row_location_hint"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/narration"
@@ -27,6 +28,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/location"
         android:layout_toRightOf="@id/year"
-        android:hint="@string/row_narration_hint" />
+        android:hint="@string/row_narration_hint"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

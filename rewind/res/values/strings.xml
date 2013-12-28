@@ -8,6 +8,12 @@
     <string name="event_desc">what do you want to remember?</string>
     <string name="event_location">where r you?</string>
     <string name="event_discard">Discard</string>
+    <string name="event_cancel">Cancel</string>
+    <string name="event_update">Update</string>
+    <string name="event_go_back">Go back</string>
+    <string name="event_okay">Okay</string>
+    <string name="confirm_discard_title">Confirm action</string>
+    <string name="confirm_discard_message">All changes will be lost?</string>
     <string name="event_capture">Capture</string>
     <string name="add_event">Record event</string>
     <string name="edit_event">Rewrite event</string>
@@ -22,5 +28,8 @@
     <string name="row_year_hint">YEAR</string>
     <string name="row_location_hint">Location appears here</string>
     <string name="row_narration_hint">This is how the narration appears</string>
- 
+    <string name="all_years">All years</string>
+    <string name="all_months">All months</string>
+	<string name="year_list_title">Select a year</string>
+	<string name="month_list_title">Select a month</string>
 </resources>

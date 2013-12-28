@@ -25,6 +25,12 @@
         <activity
             android:name="com.mk.rewind.EventEditActivity"
             android:label="@string/app_name" />
+        <activity
+            android:name="com.mk.rewind.YearListActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.mk.rewind.MonthListActivity"
+            android:label="@string/app_name" />
     </application>
 
 </manifest>

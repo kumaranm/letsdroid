@@ -6,30 +6,24 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".EventListActivity" >
+    tools:context=".MonthListActivity" >
 
-    <TextView
-        android:id="@+id/eventstoday"
+     <TextView
+        android:id="@+id/monthlisttitle"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
+        android:text="@string/month_list_title"
         android:paddingBottom="5dp"
          />
-    
+
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
+        android:layout_height="match_parent"
         android:fastScrollEnabled="true"
-        android:layout_below="@id/eventstoday"
+        android:layout_below="@id/monthlisttitle"
         android:scrollbars="vertical"
-        android:fadeScrollbars="true"
-        />
-
-   <!--  <TextView
-        android:id="@+id/android:empty"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/no_events_today" /> -->
+        android:fadeScrollbars="true"/>
 
 </RelativeLayout>

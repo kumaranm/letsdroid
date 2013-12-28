@@ -1,5 +1,7 @@
 package com.mk.rewind;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import android.app.ListActivity;
@@ -13,18 +15,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
-public class EventListActivity extends ListActivity
-{
+public class EventListActivity extends ListActivity {
 
 	private EventOperations db;
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
 
+	private int year = -1;
+	private int month = -1;
+
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
-	{
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_event_list);
 
@@ -34,29 +38,57 @@ public class EventListActivity extends ListActivity
 		 * R.layout.event_row, R.id.eventtext, events); setListAdapter(adapter);
 		 */
 
+		year = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR) : -1;
+		month = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_MONTH) : -1;
+
+		
+		setDataFromIntent();
+		
 		db = new EventOperations(this);
 		db.open();
 		fillData();
 	}
-
-	private void fillData()
+	
+	private void setDataFromIntent()
 	{
-		List<Event> lst = db.getAllEvents();
+		if (year == -1)
+		{
+			Bundle extras = getIntent().getExtras();
+			year = extras != null ? Integer.parseInt(extras.getString(DatabaseWrapper.KEY_YEAR)) : -1;
+		}
+		if (month == -1)
+		{
+			Bundle extras = getIntent().getExtras();
+			month = extras != null ? Integer.parseInt(extras.getString(DatabaseWrapper.KEY_MONTH)) : -1;
+		}
+	}
 
+	private void fillData() {
+		List<Event> lst = new ArrayList<Event>(0);
+		String text = null;
+		if (year != -1 && month != -1) {
+			lst = db.getAllEventsByYearMonth(year, month);
+			text = "During " + month + ", " + year + "\n";
+		} else {
+			Calendar cal = Calendar.getInstance();
+			lst = db.getAllEventsByMonthDate(cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+			text = "On this day " + cal.get(Calendar.DATE) + " " + cal.get(Calendar.MONTH) + "\n";
+		}
 		// populateDummyData(lst);
 
-		if (lst.size() > 0)
-		{
+		if (lst != null && lst.size() > 0) {
+
+			if (text != null) {
+				((TextView) findViewById(R.id.eventstoday)).setText(text);
+			}
 			EventArrayAdapter adapter = new EventArrayAdapter(this, lst);
 
 			setListAdapter(adapter);
 		}
 	}
 
-	private void populateDummyData(List<Event> lst)
-	{
-		for (int i = 0; i < 10; i++)
-		{
+	private void populateDummyData(List<Event> lst) {
+		for (int i = 0; i < 10; i++) {
 			Event event = new Event();
 			event.setYear(200 + i);
 			event.setLocation("Chennai " + i);
@@ -66,8 +98,7 @@ public class EventListActivity extends ListActivity
 	}
 
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id)
-	{
+	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
 		Intent i = new Intent(this, EventEditActivity.class);
@@ -76,8 +107,7 @@ public class EventListActivity extends ListActivity
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu)
-	{
+	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.rewind_menu, menu);
@@ -85,19 +115,21 @@ public class EventListActivity extends ListActivity
 	}
 
 	@Override
-	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo)
-	{
+	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater mi = getMenuInflater();
 		mi.inflate(R.menu.rewind_longpress_menu, menu);
 	}
 
 	@Override
-	public boolean onMenuItemSelected(int featureId, MenuItem item)
-	{
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.addevent:
 			createEvent();
+			return true;
+		case R.id.listallevents:
+			Intent i = new Intent(this, YearListActivity.class);
+			startActivity(i);
 			return true;
 		case R.id.settings:
 			// Intent i = new Intent(this, TaskPreferences.class);
@@ -107,29 +139,37 @@ public class EventListActivity extends ListActivity
 		return super.onMenuItemSelected(featureId, item);
 	}
 
-	private void createEvent()
-	{
+	private void createEvent() {
 		Intent i = new Intent(this, EventEditActivity.class);
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent intent)
-	{
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		// Reload the list here
 		fillData();
 	}
 
 	@Override
-	public boolean onContextItemSelected(MenuItem item)
-	{
+	protected void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		if (year != -1) {
+			outState.putInt(DatabaseWrapper.KEY_YEAR, year);
+		}
+		if (month != -1) {
+			outState.putInt(DatabaseWrapper.KEY_MONTH, month);
+		}
+	}
+	
+	@Override
+	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.deleteevent:
 			// delete task
 			AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
 			db.deleteEvent(info.id);
-			Toast text = Toast.makeText(this, R.string.delete_event, 2);
+			Toast text = Toast.makeText(this, R.string.delete_event, Toast.LENGTH_SHORT);
 			text.show();
 			fillData();
 			return true;

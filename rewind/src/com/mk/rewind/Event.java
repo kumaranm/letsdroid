@@ -9,6 +9,10 @@ public class Event {
 	private int date;
 	private int month;
 	private int year;
+	// 0 - not, 1 - archived
+	private int archived;
+
+	private int attachmentId;
 
 	public int getId() {
 		return id;
@@ -64,6 +68,22 @@ public class Event {
 
 	public void setYear(int year) {
 		this.year = year;
+	}
+
+	public int getArchived() {
+		return archived;
+	}
+
+	public void setArchived(int archived) {
+		this.archived = archived;
+	}
+
+	public int getAttachmentId() {
+		return attachmentId;
+	}
+
+	public void setAttachmentId(int attachmentId) {
+		this.attachmentId = attachmentId;
 	}
 
 }
