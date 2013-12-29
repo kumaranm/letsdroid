@@ -72,7 +72,7 @@ public class EventListActivity extends ListActivity {
 		List<Event> lst = new ArrayList<Event>(0);
 		String text = null;
 		String display = null;
-		if (year != -1 && month != -1) {
+		if (year != -1 && month != -1 && (year != Helper.ALL && month != Helper.ALL)) {
 			lst = db.getAllEventsByYearMonth(year, month);
 			text = "Events during " + Helper.getMonthString(month) + ", " + year + " \n";
 			display = Helper.DISP_DATE;

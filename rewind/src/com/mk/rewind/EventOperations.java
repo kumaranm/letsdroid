@@ -110,7 +110,8 @@ public class EventOperations {
 	public List<Event> getAllEvents() {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
-				+ UNARCHIVED, null, null, null, null);
+				+ UNARCHIVED, null, null, null, DatabaseWrapper.KEY_YEAR + " DESC , " + DatabaseWrapper.KEY_MONTH
+				+ " DESC , " + DatabaseWrapper.KEY_DATE + " DESC ");
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
