@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class MonthListActivity extends ListActivity {
@@ -33,6 +34,10 @@ public class MonthListActivity extends ListActivity {
 
 		setDataFromIntent();
 
+		String str = String.valueOf(((TextView) findViewById(R.id.monthlisttitle)).getText());
+		str = year + " > " + str;
+		((TextView) findViewById(R.id.monthlisttitle)).setText(str); 
+		
 		db = new EventOperations(this);
 		db.open();
 		fillData();
@@ -41,7 +46,8 @@ public class MonthListActivity extends ListActivity {
 	private void setDataFromIntent() {
 		if (year == -1) {
 			Bundle extras = getIntent().getExtras();
-			year = extras != null ? Integer.parseInt(extras.getString(DatabaseWrapper.KEY_YEAR)) : -1;
+			year = extras != null && extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
+					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
 		}
 	}
 
@@ -52,8 +58,15 @@ public class MonthListActivity extends ListActivity {
 
 		// populateDummyData(lst);
 
-		if (months != null && months.length > 0) {
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, months);
+		if (months != null && months.length > 1) {
+			months[0] = getString(R.string.all_months);
+
+			String[] monthDisp = new String[months.length];
+			monthDisp[0] = months[0];
+			for (int i = 1; i < months.length; i++) {
+				monthDisp[i] = Helper.getMonthString(Integer.parseInt(months[i]));
+			}
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, monthDisp);
 			setListAdapter(adapter);
 		}
 	}
@@ -72,11 +85,26 @@ public class MonthListActivity extends ListActivity {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		super.onListItemClick(l, v, position, id);
 
-		Intent i = new Intent(this, EventListActivity.class);
-		i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
-		i.putExtra(DatabaseWrapper.KEY_MONTH, months[position]);
-		startActivity(i);
-		// startActivityForResult(i, ACTIVITY_EDIT);
+		if (position == 0) {
+			Intent i = new Intent(this, EventListActivity.class);
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
+			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(Helper.ALL));
+			 startActivityForResult(i, ACTIVITY_EDIT);
+//			startActivity(i);
+		} else {
+			Intent i = new Intent(this, EventListActivity.class);
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
+			i.putExtra(DatabaseWrapper.KEY_MONTH, months[position]);
+//			startActivity(i);
+			 startActivityForResult(i, ACTIVITY_EDIT);
+		}
+	}
+
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+		super.onActivityResult(requestCode, resultCode, intent);
+		// Reload the list here
+		fillData();
 	}
 
 	/*

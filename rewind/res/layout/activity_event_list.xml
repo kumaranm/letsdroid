@@ -13,23 +13,25 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingBottom="5dp"
-         />
-    
+        android:paddingBottom="2dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" 
-        android:fastScrollEnabled="true"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/eventstoday"
-        android:scrollbars="vertical"
         android:fadeScrollbars="true"
-        />
+        android:fastScrollEnabled="true"
+        android:scrollbars="vertical" />
 
-   <!--  <TextView
+    <!--
+         <TextView
         android:id="@+id/android:empty"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/no_events_today" /> -->
+        android:text="@string/no_events_today" />
+    -->
 
 </RelativeLayout>

@@ -31,5 +31,9 @@
     <string name="all_years">All years</string>
     <string name="all_months">All months</string>
 	<string name="year_list_title">Select a year</string>
-	<string name="month_list_title">Select a month</string>
+	<string name="month_list_title">Select a month</string> 
+	<string name="list_archived_events">List archived events</string>
+	<string name="home_event">Home</string>
+	<string name="archive_event">Archive</string>
+	<string name="unarchive_event">Un-Archive</string>
 </resources>

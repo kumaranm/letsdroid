@@ -2,11 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <item
+        android:id="@+id/homeevent"
+        android:title="@string/home_event"/> 
+    <item
         android:id="@+id/addevent"
         android:title="@string/add_event"/>
     <item
         android:id="@+id/listallevents"
         android:title="@string/list_all_events"/>
+    <item
+        android:id="@+id/listarchivedevents"
+        android:title="@string/list_archived_events"/>
     <item
         android:id="@+id/settings"
         android:title="@string/settings"/>

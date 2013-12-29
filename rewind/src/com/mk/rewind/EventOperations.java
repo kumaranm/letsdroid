@@ -43,9 +43,10 @@ public class EventOperations {
 		values.put(DatabaseWrapper.KEY_DATE, date);
 		values.put(DatabaseWrapper.KEY_MONTH, month);
 		values.put(DatabaseWrapper.KEY_YEAR, year);
-		values.put(DatabaseWrapper.KEY_ARCHIVED, 0);
+		values.put(DatabaseWrapper.KEY_ARCHIVED, UNARCHIVED);
 		values.put(DatabaseWrapper.KEY_ATTACHMENT, 0);
 		long id = db.insert(DatabaseWrapper.DATABASE_TABLE, null, values);
+		Log.d("createEvent", "record inserted in db -" + id);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ROWID + "=" + id
 				+ " AND " + DatabaseWrapper.KEY_ARCHIVED + " = " + UNARCHIVED, null, null, null, null);
 
@@ -125,7 +126,8 @@ public class EventOperations {
 	public List<Event> getAllEventsByYear(int year) {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
-				+ UNARCHIVED + " AND " + DatabaseWrapper.KEY_YEAR + "=" + year, null, null, null, null);
+				+ UNARCHIVED + " AND " + DatabaseWrapper.KEY_YEAR + "=" + year, null, null, null,
+				DatabaseWrapper.KEY_MONTH + " DESC , " + DatabaseWrapper.KEY_DATE + " DESC ");
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -142,7 +144,7 @@ public class EventOperations {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
 				+ UNARCHIVED + " AND " + DatabaseWrapper.KEY_YEAR + "=" + year + " AND " + DatabaseWrapper.KEY_MONTH
-				+ "=" + month, null, null, null, null);
+				+ "=" + month, null, null, null, DatabaseWrapper.KEY_DATE + " DESC ");
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -159,7 +161,7 @@ public class EventOperations {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
 				+ UNARCHIVED + " AND " + DatabaseWrapper.KEY_DATE + "=" + date + " AND " + DatabaseWrapper.KEY_MONTH
-				+ "=" + month, null, DatabaseWrapper.KEY_YEAR, null, DatabaseWrapper.KEY_YEAR + " DESC ");
+				+ "=" + month, null, null, null, DatabaseWrapper.KEY_YEAR + " DESC ");
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			while (!cursor.isAfterLast()) {
@@ -195,10 +197,9 @@ public class EventOperations {
 				+ " ORDER BY " + DatabaseWrapper.KEY_YEAR + " DESC ", null);
 
 		if (cursor.getCount() > 0) {
-			int i = 0;
 			cursor.moveToFirst();
-			years = new String[cursor.getCount()];
-
+			years = new String[cursor.getCount() + 1];
+			int i = 1;
 			while (!cursor.isAfterLast()) {
 				years[i] = String.valueOf(cursor.getInt(cursor.getColumnIndex(DatabaseWrapper.KEY_YEAR)));
 				i++;
@@ -218,10 +219,10 @@ public class EventOperations {
 				null);
 
 		if (cursor.getCount() > 0) {
-			int i = 0;
 			cursor.moveToFirst();
-			months = new String[cursor.getCount()];
+			months = new String[cursor.getCount() + 1];
 
+			int i = 1;
 			while (!cursor.isAfterLast()) {
 				months[i] = String.valueOf(cursor.getInt(cursor.getColumnIndex(DatabaseWrapper.KEY_MONTH)));
 				i++;
@@ -253,7 +254,6 @@ public class EventOperations {
 		values.put(DatabaseWrapper.KEY_DATE, date);
 		values.put(DatabaseWrapper.KEY_MONTH, month);
 		values.put(DatabaseWrapper.KEY_YEAR, year);
-		values.put(DatabaseWrapper.KEY_ATTACHMENT, 0);
 		return db.update(DatabaseWrapper.DATABASE_TABLE, values, DatabaseWrapper.KEY_ROWID + "=" + id, null) > 0;
 	}
 }

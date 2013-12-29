@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -82,6 +83,13 @@ public class EventEditActivity extends Activity {
 				Log.e(this.getLocalClassName(), e.getMessage(), e);
 			}
 			updateDateButtonText();
+//			((MenuItem)findViewById(R.id.deleteevent)).setVisible(true);
+//			((MenuItem)findViewById(R.id.archiveevent)).setVisible(true);
+		}
+		else
+		{
+//			((MenuItem)findViewById(R.id.deleteevent)).setVisible(false);
+//			((MenuItem)findViewById(R.id.archiveevent)).setVisible(false);
 		}
 		/*
 		 * else { SharedPreferences prefs =
@@ -227,7 +235,7 @@ public class EventEditActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		// getMenuInflater().inflate(R.menu.reminder_edit, menu);
+//		 getMenuInflater().inflate(R.menu.rewind_edit_menu, menu);
 		return true;
 	}
 
@@ -250,4 +258,31 @@ public class EventEditActivity extends Activity {
 	protected void onStart() {
 		super.onStart();
 	}
+	
+	/*@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.deleteevent:
+			if(rowId != null)
+			{
+				db.deleteEvent(rowId);
+				setResult(RESULT_OK);
+				Toast.makeText(this, R.string.delete_event, Toast.LENGTH_SHORT).show();
+//				setContentView(R.layout.activity_event_list);
+				finish();
+			}
+			return true;
+		case R.id.archiveevent:
+			if(rowId != null)
+			{
+				db.archiveEvent(rowId);
+				setResult(RESULT_OK);
+				Toast.makeText(this, "Event archived", Toast.LENGTH_SHORT).show();
+//				setContentView(R.layout.activity_event_list);
+				finish();
+			}
+			return true;
+		}
+		return super.onMenuItemSelected(featureId, item);
+	}*/
 }
