@@ -23,7 +23,7 @@ public class EventListActivity extends ListActivity {
 	private EventOperations db;
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
-
+	
 	private int year = -1;
 	private int month = -1;
 	private int archived = 0;
@@ -39,10 +39,15 @@ public class EventListActivity extends ListActivity {
 		 * R.layout.event_row, R.id.eventtext, events); setListAdapter(adapter);
 		 */
 
-		year = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR) : -1;
-		month = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_MONTH) : -1;
-		archived = savedInstanceState != null ? savedInstanceState.getInt(Helper.ARCHIVED_KEY) : 0;
-
+		if (savedInstanceState != null)
+		{
+			year = savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR);
+			month = savedInstanceState.getInt(DatabaseWrapper.KEY_MONTH);
+			archived = savedInstanceState.getInt(Helper.ARCHIVED_KEY);
+//			year = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR) : -1;
+//			month = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_MONTH) : -1;
+//			archived = savedInstanceState != null ? savedInstanceState.getInt(Helper.ARCHIVED_KEY) : 0;
+		}
 		setDataFromIntent();
 
 		db = new EventOperations(this);
@@ -51,20 +56,21 @@ public class EventListActivity extends ListActivity {
 	}
 
 	private void setDataFromIntent() {
-		if (year == -1) {
+		
+		if(getIntent() != null && getIntent().getExtras() != null){
+//		if (year == -1) {
 			Bundle extras = getIntent().getExtras();
-			year = extras != null && extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
+			year = extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
-		}
-		if (month == -1) {
-			Bundle extras = getIntent().getExtras();
-			month = extras != null && extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
+//		}
+//		if (month == -1) {
+			month = extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_MONTH)) : -1;
-		}
-		if (archived == 0) {
-			Bundle extras = getIntent().getExtras();
-			archived = extras != null && extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
+//		}
+//		if (archived == 0) {
+			archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
 					.getString(Helper.ARCHIVED_KEY)) : 0;
+//		}
 		}
 	}
 
@@ -77,7 +83,7 @@ public class EventListActivity extends ListActivity {
 			text = "Events during " + Helper.getMonthString(month) + ", " + year + " \n";
 			display = Helper.DISP_DATE;
 		} else if (year == Helper.ALL) {
-			lst = db.getAllEvents();
+			lst = db.getAllEvents(); 
 			text = "ALL Events \n";
 			display = Helper.DISP_YEAR_MONTH_DATE;
 		} else if (year != -1 && month == Helper.ALL) {
@@ -105,6 +111,7 @@ public class EventListActivity extends ListActivity {
 
 			setListAdapter(adapter);
 		}
+		
 	}
 
 	private void populateDummyData(List<Event> lst) {
@@ -116,13 +123,22 @@ public class EventListActivity extends ListActivity {
 			lst.add(event);
 		}
 	}
-
+	
 	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
+	protected void onListItemClick(ListView l, View v, int position, long id)
+	{
 		super.onListItemClick(l, v, position, id);
 
 		Intent i = new Intent(this, EventEditActivity.class);
 		i.putExtra(DatabaseWrapper.KEY_ROWID, id);
+		if (year != -1)
+		{
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
+		}
+		if (month != -1)
+		{
+			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(month));
+		}
 		startActivityForResult(i, ACTIVITY_EDIT);
 	}
 
@@ -178,6 +194,18 @@ public class EventListActivity extends ListActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		// Reload the list here
+		/*if (intent != null && intent.getExtras() != null)
+		{
+			Bundle extras = intent.getExtras();
+			year = extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
+					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
+			month = extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
+					.getString(DatabaseWrapper.KEY_MONTH)) : -1;
+			archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
+					.getString(Helper.ARCHIVED_KEY)) : 0;
+		}*/
+		setIntent(intent);
+		setDataFromIntent(); 
 		fillData();
 	}
 
@@ -217,4 +245,8 @@ public class EventListActivity extends ListActivity {
 		return super.onContextItemSelected(item);
 	}
 
+	@Override
+	public void onBackPressed() {
+		
+	}
 }

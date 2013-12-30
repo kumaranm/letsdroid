@@ -9,10 +9,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -181,9 +181,13 @@ public class EventEditActivity extends Activity {
 					calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
 		}
 
-		setResult(RESULT_OK);
+		Intent i = new Intent(this, EventListActivity.class);
+		i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(calendar.get(Calendar.YEAR)));
+		i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(calendar.get(Calendar.MONTH)));
+		i.putExtra(DatabaseWrapper.KEY_DATE, String.valueOf(calendar.get(Calendar.DATE)));
+		setResult(RESULT_OK, i);
+//		setContentView(R.layout.activity_event_list);
 		Toast.makeText(EventEditActivity.this, "Event captured", Toast.LENGTH_SHORT).show();
-		setContentView(R.layout.activity_event_list);
 		finish();
 	}
 

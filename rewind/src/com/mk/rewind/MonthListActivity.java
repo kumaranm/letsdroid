@@ -30,21 +30,19 @@ public class MonthListActivity extends ListActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_month_list);
 
-		year = savedInstanceState != null ? savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR) : -1;
+		if(savedInstanceState != null)
+		{
+			year = savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR);
+		}
 
 		setDataFromIntent();
-
-		String str = String.valueOf(((TextView) findViewById(R.id.monthlisttitle)).getText());
-		str = year + " > " + str;
-		((TextView) findViewById(R.id.monthlisttitle)).setText(str); 
-		
 		db = new EventOperations(this);
 		db.open();
 		fillData();
 	}
 
 	private void setDataFromIntent() {
-		if (year == -1) {
+		if (getIntent() != null && getIntent().getExtras() != null) {
 			Bundle extras = getIntent().getExtras();
 			year = extras != null && extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
@@ -52,6 +50,19 @@ public class MonthListActivity extends ListActivity {
 	}
 
 	private void fillData() {
+		
+		String str = String.valueOf(((TextView) findViewById(R.id.monthlisttitle)).getText());
+		if (str.indexOf(">") > 0)
+		{
+			str = str.substring(str.indexOf("> ") + 2);
+			str = year + " > " + str;
+		}
+		else
+		{
+			str = year + " > " + str;
+		}
+		((TextView) findViewById(R.id.monthlisttitle)).setText(str);
+		
 		Calendar cal = Calendar.getInstance();
 
 		months = db.getMonths(year);
@@ -104,6 +115,8 @@ public class MonthListActivity extends ListActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		// Reload the list here
+		setIntent(intent);
+		setDataFromIntent();
 		fillData();
 	}
 

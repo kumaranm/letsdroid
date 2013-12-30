@@ -15,6 +15,8 @@ public class Helper {
 	public static final String DISP_YEAR_MONTH_DATE = "DISP_YEAR_MONTH_DATE";
 	public static final String DISP_MONTH_DATE = "DISP_MONTH_DATE";
 	public static final String DISP_DATE = "DISP_DATE";
+	
+	public static final String[] MONTHS_SHORT = {"JAN", "FEB", "MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"};
 
 	public static Map<String, Map<String, List<Event>>> filterEvents(List<Event> eventList) {
 		Map<String, Map<String, List<Event>>> yearMap = new HashMap<String, Map<String, List<Event>>>(10);
@@ -27,8 +29,9 @@ public class Helper {
 	}
 
 	public static String getMonthString(int month) {
-		Calendar cal = Calendar.getInstance();
+		/*Calendar cal = Calendar.getInstance();
 		cal.set(Calendar.MONTH, month);
-		return new SimpleDateFormat("MMM").format(cal.getTime());
+		return new SimpleDateFormat("MMM").format(cal.getTime());*/
+		return MONTHS_SHORT[month];
 	}
 }
