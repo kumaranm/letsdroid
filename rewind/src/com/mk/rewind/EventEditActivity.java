@@ -34,6 +34,7 @@ public class EventEditActivity extends Activity {
 	public static final String DATE_TIME_FORMAT = "dd-MM-yyyy kk:mm:ss";
 	private EventOperations db;
 	private Long rowId;
+	private static String fromPage = "";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -60,9 +61,19 @@ public class EventEditActivity extends Activity {
 	}
 
 	private void setRowIdFromIntent() {
-		if (rowId == null) {
+		/*if (rowId == null) {
 			Bundle extras = getIntent().getExtras();
 			rowId = extras != null ? extras.getLong(DatabaseWrapper.KEY_ROWID) : null;
+		}*/
+		
+		if (getIntent() != null && getIntent().getExtras() != null)
+		{
+			Bundle extras = getIntent().getExtras();
+			if(rowId == null)
+			{
+				rowId = extras != null ? extras.getLong(DatabaseWrapper.KEY_ROWID) : null;
+			}
+			fromPage = extras.getString(Helper.FROM_PAGE_KEY) != null ? extras.getString(Helper.FROM_PAGE_KEY) : "";
 		}
 	}
 
@@ -185,6 +196,7 @@ public class EventEditActivity extends Activity {
 		i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(calendar.get(Calendar.YEAR)));
 		i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(calendar.get(Calendar.MONTH)));
 		i.putExtra(DatabaseWrapper.KEY_DATE, String.valueOf(calendar.get(Calendar.DATE)));
+		i.putExtra(Helper.FROM_PAGE_KEY, fromPage);
 		setResult(RESULT_OK, i);
 //		setContentView(R.layout.activity_event_list);
 		Toast.makeText(EventEditActivity.this, "Event captured", Toast.LENGTH_SHORT).show();

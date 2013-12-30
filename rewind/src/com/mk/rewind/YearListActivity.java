@@ -64,10 +64,12 @@ public class YearListActivity extends ListActivity {
 		if (position == 0) {
 			Intent i = new Intent(this, EventListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(Helper.ALL));
+			i.putExtra(Helper.FROM_PAGE_KEY, Helper.YEAR_ALL_LIST_PAGE);
 			startActivityForResult(i, ACTIVITY_EDIT);
 		} else {
 			Intent i = new Intent(this, MonthListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, years[position]);
+			i.putExtra(Helper.FROM_PAGE_KEY, Helper.YEAR_LIST_PAGE);
 //			startActivity(i);
 			 startActivityForResult(i, ACTIVITY_EDIT);
 		}

@@ -100,12 +100,14 @@ public class MonthListActivity extends ListActivity {
 			Intent i = new Intent(this, EventListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
 			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(Helper.ALL));
+			i.putExtra(Helper.FROM_PAGE_KEY, Helper.MONTH_ALL_LIST_PAGE);
 			 startActivityForResult(i, ACTIVITY_EDIT);
 //			startActivity(i);
 		} else {
 			Intent i = new Intent(this, EventListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
 			i.putExtra(DatabaseWrapper.KEY_MONTH, months[position]);
+			i.putExtra(Helper.FROM_PAGE_KEY, Helper.MONTH_LIST_PAGE);
 //			startActivity(i);
 			 startActivityForResult(i, ACTIVITY_EDIT);
 		}

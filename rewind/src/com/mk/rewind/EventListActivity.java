@@ -24,6 +24,7 @@ public class EventListActivity extends ListActivity {
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
 	
+	private static String fromPage = "";
 	private int year = -1;
 	private int month = -1;
 	private int archived = 0;
@@ -57,20 +58,23 @@ public class EventListActivity extends ListActivity {
 
 	private void setDataFromIntent() {
 		
-		if(getIntent() != null && getIntent().getExtras() != null){
-//		if (year == -1) {
+		if (getIntent() != null && getIntent().getExtras() != null)
+		{
 			Bundle extras = getIntent().getExtras();
+			fromPage = extras.getString(Helper.FROM_PAGE_KEY) != null ? extras.getString(Helper.FROM_PAGE_KEY) : "";
+			// if (year == -1) {
 			year = extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
-//		}
-//		if (month == -1) {
+			// }
+			// if (month == -1) {
 			month = extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_MONTH)) : -1;
-//		}
-//		if (archived == 0) {
+			// }
+			// if (archived == 0) {
 			archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
 					.getString(Helper.ARCHIVED_KEY)) : 0;
-//		}
+
+			// }
 		}
 	}
 
@@ -130,7 +134,7 @@ public class EventListActivity extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 
 		Intent i = new Intent(this, EventEditActivity.class);
-		i.putExtra(DatabaseWrapper.KEY_ROWID, id);
+		i.putExtra(DatabaseWrapper.KEY_ROWID, id); 
 		if (year != -1)
 		{
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
@@ -139,6 +143,7 @@ public class EventListActivity extends ListActivity {
 		{
 			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(month));
 		}
+		i.putExtra(Helper.FROM_PAGE_KEY, fromPage);
 		startActivityForResult(i, ACTIVITY_EDIT);
 	}
 
@@ -174,6 +179,7 @@ public class EventListActivity extends ListActivity {
 		case R.id.listarchivedevents:
 			Intent i1 = new Intent(this, EventListActivity.class);
 			i1.putExtra(Helper.ARCHIVED_KEY, String.valueOf(1));
+			i1.putExtra(Helper.FROM_PAGE_KEY, Helper.ARCHIVED_LIST_PAGE);
 			startActivityForResult(i1, ACTIVITY_EDIT);
 //			startActivity(i1);
 			return true;
@@ -246,7 +252,37 @@ public class EventListActivity extends ListActivity {
 	}
 
 	@Override
-	public void onBackPressed() {
-		
+	public void onBackPressed()
+	{
+		if (Helper.MONTH_LIST_PAGE.equals(fromPage))
+		{
+			Intent i = new Intent(this, MonthListActivity.class);
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
+			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(month));
+			setResult(RESULT_OK, i);
+			finish();
+		}
+		else if (Helper.YEAR_LIST_PAGE.equals(fromPage))
+		{
+			Intent i = new Intent(this, YearListActivity.class);
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
+			setResult(RESULT_OK, i);
+			finish();
+		}
+		else if (Helper.MONTH_ALL_LIST_PAGE.equals(fromPage))
+		{
+			Intent i = new Intent(this, MonthListActivity.class);
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
+			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(Helper.ALL));
+			setResult(RESULT_OK, i);
+			finish();
+		}
+		else if (Helper.YEAR_ALL_LIST_PAGE.equals(fromPage))
+		{
+			Intent i = new Intent(this, YearListActivity.class);
+			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(Helper.ALL));
+			setResult(RESULT_OK, i);
+			finish();
+		}
 	}
 }
