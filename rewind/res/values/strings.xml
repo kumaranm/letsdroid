@@ -22,7 +22,7 @@
     <string name="list_all_events">List all events</string>
     <string name="narration_title">Enter narration</string>
     <string name="location_title">Enter location</string>
-    <string name="date_title">Enter date</string>
+    <string name="date_title">Select date</string>
     <string name="discard_button">Discard</string>
     <string name="capture_button">Capture</string>
     <string name="row_year_hint">YEAR</string>

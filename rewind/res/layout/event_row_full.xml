@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/white_border"
+    >
 
     <TextView
         android:id="@+id/year"
@@ -9,27 +11,32 @@
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:hint="@string/row_year_hint"
-        android:minHeight="100dip"
-        android:textAlignment="textStart"
+        android:minLines="3"
+        android:textAlignment="gravity"
+        android:paddingLeft="10dip"
+        android:paddingTop="5dip"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
-    <TextView
+    <TextView 
         android:id="@+id/location"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/year"
-        android:hint="@string/row_location_hint"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:textStyle="bold" 
+        android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView
         android:id="@+id/narration"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignBottom="@+id/year"
         android:layout_below="@+id/location"
         android:layout_toRightOf="@id/year"
+        android:maxLines="8"
+        android:scrollbars="vertical"
         android:hint="@string/row_narration_hint"
+        android:scrollbarStyle="insideOverlay"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>

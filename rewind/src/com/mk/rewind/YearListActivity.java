@@ -39,12 +39,12 @@ public class YearListActivity extends ListActivity {
 		years = db.getYears();
 
 		// populateDummyData(lst);
-
-		if (years != null && years.length > 1) {
-			years[0] = getString(R.string.all_years);
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, years);
-			setListAdapter(adapter);
+		if (years == null) {
+			years = new String[0];
 		}
+		years[0] = getString(R.string.all_years);
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, years);
+		setListAdapter(adapter);
 	}
 
 	private void populateDummyData(List<Event> lst) {

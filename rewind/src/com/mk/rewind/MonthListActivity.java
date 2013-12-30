@@ -50,36 +50,33 @@ public class MonthListActivity extends ListActivity {
 	}
 
 	private void fillData() {
-		
+
 		String str = String.valueOf(((TextView) findViewById(R.id.monthlisttitle)).getText());
-		if (str.indexOf(">") > 0)
-		{
+		if (str.indexOf(">") > 0) {
 			str = str.substring(str.indexOf("> ") + 2);
 			str = year + " > " + str;
-		}
-		else
-		{
+		} else {
 			str = year + " > " + str;
 		}
 		((TextView) findViewById(R.id.monthlisttitle)).setText(str);
-		
+
 		Calendar cal = Calendar.getInstance();
 
 		months = db.getMonths(year);
 
 		// populateDummyData(lst);
-
-		if (months != null && months.length > 1) {
-			months[0] = getString(R.string.all_months);
-
-			String[] monthDisp = new String[months.length];
-			monthDisp[0] = months[0];
-			for (int i = 1; i < months.length; i++) {
-				monthDisp[i] = Helper.getMonthString(Integer.parseInt(months[i]));
-			}
-			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, monthDisp);
-			setListAdapter(adapter);
+		if (months == null) {
+			months = new String[1];
 		}
+		months[0] = getString(R.string.all_months);
+
+		String[] monthDisp = new String[months.length];
+		monthDisp[0] = months[0];
+		for (int i = 1; i < months.length; i++) {
+			monthDisp[i] = Helper.getMonthString(Integer.parseInt(months[i]));
+		}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, monthDisp);
+		setListAdapter(adapter);
 	}
 
 	private void populateDummyData(List<Event> lst) {
