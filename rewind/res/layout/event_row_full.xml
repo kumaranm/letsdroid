@@ -38,6 +38,7 @@
         android:scrollbarStyle="insideOverlay"
         android:scrollbars="vertical"
         android:paddingLeft="5dp"
+        android:textStyle="italic" 
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
