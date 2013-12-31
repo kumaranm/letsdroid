@@ -292,4 +292,10 @@ public class EventEditActivity extends Activity {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
+	
+	@Override
+	public void onBackPressed()
+	{
+		
+	}
 }

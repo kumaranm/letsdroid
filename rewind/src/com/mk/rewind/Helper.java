@@ -15,7 +15,9 @@ public class Helper
 	public static final String DISP_MONTH_DATE = "DISP_MONTH_DATE";
 	public static final String DISP_DATE = "DISP_DATE";
 	public static final String FROM_PAGE_KEY = "FROM_PAGE_KEY";
+	public static final String HOME_PAGE = "HOME_PAGE";
 	public static final String MONTH_LIST_PAGE = "MONTH_LIST_PAGE";
+	public static final String NEW_EVENT_PAGE = "NEW_EVENT_PAGE";
 	public static final String MONTH_ALL_LIST_PAGE = "MONTH_ALL_LIST_PAGE";
 	public static final String YEAR_LIST_PAGE = "YEAR_LIST_PAGE";
 	public static final String YEAR_ALL_LIST_PAGE = "YEAR_ALL_LIST_PAGE";

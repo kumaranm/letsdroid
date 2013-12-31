@@ -10,8 +10,6 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ActionMode;
-import android.view.ContextMenu;
-import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -27,7 +25,7 @@ public class EventListActivity extends ListActivity {
 	private static final int ACTIVITY_CREATE = 0;
 	private static final int ACTIVITY_EDIT = 1;
 	
-	private static String fromPage = "";
+	private static String fromPage = Helper.HOME_PAGE;
 	private int year = -1;
 	private int month = -1;
 //	private int archived = 0;
@@ -43,7 +41,7 @@ public class EventListActivity extends ListActivity {
 		 * ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
 		 * R.layout.event_row, R.id.eventtext, events); setListAdapter(adapter);
 		 */
-
+		fromPage = Helper.HOME_PAGE;
 		if (savedInstanceState != null)
 		{
 			year = savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR);
@@ -61,7 +59,7 @@ public class EventListActivity extends ListActivity {
 
 		if (getIntent() != null && getIntent().getExtras() != null) {
 			Bundle extras = getIntent().getExtras();
-			fromPage = extras.getString(Helper.FROM_PAGE_KEY) != null ? extras.getString(Helper.FROM_PAGE_KEY) : "";
+			fromPage = extras.getString(Helper.FROM_PAGE_KEY) != null ? extras.getString(Helper.FROM_PAGE_KEY) : Helper.HOME_PAGE;
 			year = extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
 			month = extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
@@ -84,7 +82,7 @@ public class EventListActivity extends ListActivity {
 			text = "Archived Events \n";
 			display = Helper.DISP_YEAR_MONTH_DATE;
 		}
-		else if (Helper.MONTH_LIST_PAGE.equals(fromPage) && year != -1 && month != -1
+		else if ((Helper.MONTH_LIST_PAGE.equals(fromPage) || Helper.NEW_EVENT_PAGE.equals(fromPage) ) && year != -1 && month != -1
 				&& (year != Helper.ALL && month != Helper.ALL))
 		{
 			lst = db.getAllEventsByYearMonth(year, month);
@@ -292,10 +290,7 @@ public class EventListActivity extends ListActivity {
 		{
 			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(month));
 		}
-		if (!fromPage.equals(""))
-		{
-			i.putExtra(Helper.FROM_PAGE_KEY, fromPage); 
-		}
+		i.putExtra(Helper.FROM_PAGE_KEY, fromPage); 
 		startActivityForResult(i, ACTIVITY_EDIT);
 	}
 
@@ -319,14 +314,14 @@ public class EventListActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.homeevent:
 			Intent i2 = new Intent(this, EventListActivity.class);
-			i2.putExtra(Helper.FROM_PAGE_KEY, "");
+			i2.putExtra(Helper.FROM_PAGE_KEY, Helper.HOME_PAGE);
 			startActivity(i2);
 			return true;
 		case R.id.addevent:
 			createEvent();
 			return true;
 		case R.id.listallevents:
-			fromPage = "";
+			fromPage = Helper.HOME_PAGE;
 			Intent i = new Intent(this, YearListActivity.class);
 			startActivityForResult(i, ACTIVITY_EDIT);
 			return true;
@@ -347,7 +342,7 @@ public class EventListActivity extends ListActivity {
 	
 	private void createEvent() {
 		Intent i = new Intent(this, EventEditActivity.class);
-		i.putExtra(Helper.FROM_PAGE_KEY, Helper.MONTH_LIST_PAGE);
+		i.putExtra(Helper.FROM_PAGE_KEY, Helper.NEW_EVENT_PAGE);
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 
@@ -401,7 +396,7 @@ public class EventListActivity extends ListActivity {
 	{
 		if (Helper.MONTH_LIST_PAGE.equals(fromPage))
 		{
-			fromPage="";
+			fromPage=Helper.HOME_PAGE;
 			Intent i = new Intent(this, MonthListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
 			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(month));
@@ -410,7 +405,7 @@ public class EventListActivity extends ListActivity {
 		}
 		else if (Helper.YEAR_LIST_PAGE.equals(fromPage))
 		{
-			fromPage="";
+			fromPage=Helper.HOME_PAGE;
 			Intent i = new Intent(this, YearListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
 			setResult(RESULT_OK, i);
@@ -418,7 +413,7 @@ public class EventListActivity extends ListActivity {
 		}
 		else if (Helper.MONTH_ALL_LIST_PAGE.equals(fromPage))
 		{
-			fromPage="";
+			fromPage=Helper.HOME_PAGE;
 			Intent i = new Intent(this, MonthListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
 			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(Helper.ALL));
@@ -427,18 +422,24 @@ public class EventListActivity extends ListActivity {
 		}
 		else if (Helper.YEAR_ALL_LIST_PAGE.equals(fromPage))
 		{
-			fromPage="";
+			fromPage=Helper.HOME_PAGE;
 			Intent i = new Intent(this, YearListActivity.class);
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(Helper.ALL));
 			setResult(RESULT_OK, i);
 			finish();
 		}else if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage))
 		{
-			fromPage = "";
+			fromPage = Helper.HOME_PAGE;
 			Intent i = new Intent(this, EventListActivity.class);
 			setResult(RESULT_OK, i);
 			finish();
-		}else if(fromPage.equals(""))
+		}else if(fromPage.equals(Helper.NEW_EVENT_PAGE))
+		{
+			fromPage = Helper.HOME_PAGE; 
+			Intent i = new Intent(this, EventListActivity.class);
+			startActivity(i);
+		}
+		else if(fromPage.equals(Helper.HOME_PAGE))
 		{
 			Intent intent = new Intent(Intent.ACTION_MAIN);
 			intent.addCategory(Intent.CATEGORY_HOME);
@@ -452,6 +453,9 @@ public class EventListActivity extends ListActivity {
 			intent.addCategory(Intent.CATEGORY_HOME);
 			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 			startActivity(intent);
+		}*/
+		/*else{ 
+			super.onBackPressed();
 		}*/
 	}
 }
