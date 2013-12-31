@@ -25,6 +25,7 @@
         android:layout_toRightOf="@id/year"
         android:paddingLeft="5dp"
         android:textStyle="bold" 
+        android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceSmall"/>
 
     <TextView
