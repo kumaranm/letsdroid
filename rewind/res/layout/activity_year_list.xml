@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".YearListActivity"
-     android:background="@drawable/white_paper" >
+     android:background="@drawable/white_bk1" >
 
   <TextView
         android:id="@+id/yearslisttitle"
@@ -25,8 +25,9 @@
         android:layout_height="match_parent"
         android:fastScrollEnabled="true"
         android:layout_below="@id/yearslisttitle"
-         android:background="@drawable/white_bk_dazed"
+        android:background="@drawable/white_bk1"
         android:scrollbars="vertical"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:fadeScrollbars="true"/>
 
 </RelativeLayout>

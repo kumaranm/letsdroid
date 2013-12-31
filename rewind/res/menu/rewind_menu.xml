@@ -3,18 +3,30 @@
 
     <item
         android:id="@+id/homeevent"
-        android:title="@string/home_event"/> 
+        android:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_today"
+        android:title="@string/home_event"/>
+    <item
+        android:id="@+id/searchevent"
+        android:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/search_event"/>
     <item
         android:id="@+id/addevent"
+        android:showAsAction="always"
+        android:icon="@android:drawable/ic_menu_add"
         android:title="@string/add_event"/>
     <item
         android:id="@+id/listallevents"
+        android:showAsAction="never"
         android:title="@string/list_all_events"/>
     <item
         android:id="@+id/listarchivedevents"
+        android:showAsAction="never"
         android:title="@string/list_archived_events"/>
     <item
         android:id="@+id/settings"
+        android:showAsAction="never"
         android:title="@string/settings"/>
 
 </menu>

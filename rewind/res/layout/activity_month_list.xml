@@ -7,7 +7,7 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".MonthListActivity" 
-     android:background="@drawable/white_paper">
+     android:background="@drawable/white_bk1">
 
      <TextView
         android:id="@+id/monthlisttitle"
@@ -26,7 +26,8 @@
         android:fastScrollEnabled="true"
         android:layout_below="@id/monthlisttitle"
         android:scrollbars="vertical"
-         android:background="@drawable/white_bk_dazed"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+         android:background="@drawable/white_bk1"
         android:fadeScrollbars="true"/>
 
 </RelativeLayout>

@@ -78,7 +78,13 @@ public class EventListActivity extends ListActivity {
 		List<Event> lst = new ArrayList<Event>(0);
 		String text = null;
 		String display = null;
-		if (Helper.MONTH_LIST_PAGE.equals(fromPage) && year != -1 && month != -1
+		if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage)/* && archived == 1*/)
+		{
+			lst = db.getAllArchivedEvents();
+			text = "Archived Events \n";
+			display = Helper.DISP_YEAR_MONTH_DATE;
+		}
+		else if (Helper.MONTH_LIST_PAGE.equals(fromPage) && year != -1 && month != -1
 				&& (year != Helper.ALL && month != Helper.ALL))
 		{
 			lst = db.getAllEventsByYearMonth(year, month);
@@ -96,12 +102,6 @@ public class EventListActivity extends ListActivity {
 			lst = db.getAllEventsByYear(year);
 			text = "Events in " + year + "\n";
 			display = Helper.DISP_MONTH_DATE;
-		}
-		else if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage)/* && archived == 1*/)
-		{
-			lst = db.getAllArchivedEvents();
-			text = "Archived Events \n";
-			display = Helper.DISP_YEAR_MONTH_DATE;
 		}
 		else
 		{
