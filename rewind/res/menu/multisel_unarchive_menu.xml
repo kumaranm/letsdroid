@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/deleteevent" 
+        android:title="@string/delete_event"
+        android:showAsAction="always"/>
+    <item
+        android:id="@+id/unarchiveevent"
+        android:title="@string/unarchive_event"
+        android:showAsAction="always"/>
+ 
+</menu>

@@ -81,6 +81,12 @@ public class EventOperations {
 		Log.i("deleteEvent", "deleting event-" + id);
 		db.delete(DatabaseWrapper.DATABASE_TABLE, DatabaseWrapper.KEY_ROWID + "=" + id, null);
 	}
+	
+	public void deleteEvents(long[] ids)
+	{
+		Log.i("deleteEvent", "deleting events-" + ids);
+		db.delete(DatabaseWrapper.DATABASE_TABLE, DatabaseWrapper.KEY_ROWID + " IN (" + Helper.convertToString(ids) + ")", null);
+	}
 
 	public boolean archiveEvent(long id) {
 		return updateArchiveEvent(id, true);
@@ -95,6 +101,15 @@ public class EventOperations {
 		ContentValues values = new ContentValues();
 		values.put(DatabaseWrapper.KEY_ARCHIVED, isArchive ? ARCHIVED : UNARCHIVED);
 		return db.update(DatabaseWrapper.DATABASE_TABLE, values, DatabaseWrapper.KEY_ROWID + "=" + id, null) > 0;
+	}
+	
+	public boolean toggleArchiveEvents(long[] ids, boolean isArchive)
+	{
+		Log.i("updateArchiveEvent", "event-" + ids);
+		ContentValues values = new ContentValues();
+		values.put(DatabaseWrapper.KEY_ARCHIVED, isArchive ? ARCHIVED : UNARCHIVED);
+		return db.update(DatabaseWrapper.DATABASE_TABLE, values,
+				DatabaseWrapper.KEY_ROWID + " IN (" + Helper.convertToString(ids) + " )", null) > 0;
 	}
 
 	/*
@@ -237,7 +252,7 @@ public class EventOperations {
 	public Event getEvent(long id) {
 		Event event = null;
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ROWID + "=" + id
-				+ " AND " + DatabaseWrapper.KEY_ARCHIVED + " = " + UNARCHIVED, null, null, null, null);
+				/*+ " AND " + DatabaseWrapper.KEY_ARCHIVED + " = " + UNARCHIVED*/, null, null, null, null);
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
 			event = parseEvent(cursor);

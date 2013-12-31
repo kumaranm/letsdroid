@@ -182,15 +182,18 @@ public class EventEditActivity extends Activity {
 
 		String dateTime = dateTimeFormat.format(cal.getTime());
 
+		String action = "";
 		if (rowId == null) {
 			Event event = db.createEvent(narration, location, dateTime, calendar.get(Calendar.DATE),
 					calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
 			if (event != null) {
 				rowId = (long) event.getId();
 			}
+			action = "Event captured";
 		} else {
 			db.updateEvent(rowId, narration, location, dateTime, calendar.get(Calendar.DATE),
 					calendar.get(Calendar.MONTH), calendar.get(Calendar.YEAR));
+			action = "Event updated";
 		}
 
 		Intent i = new Intent(this, EventListActivity.class);
@@ -200,7 +203,7 @@ public class EventEditActivity extends Activity {
 		i.putExtra(Helper.FROM_PAGE_KEY, fromPage);
 		setResult(RESULT_OK, i);
 //		setContentView(R.layout.activity_event_list);
-		Toast.makeText(EventEditActivity.this, "Event captured", Toast.LENGTH_SHORT).show();
+		Toast.makeText(EventEditActivity.this, action, Toast.LENGTH_SHORT).show();
 		finish();
 	}
 

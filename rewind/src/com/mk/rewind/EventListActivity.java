@@ -2,19 +2,21 @@ package com.mk.rewind;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.ActionMode;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView.AdapterContextMenuInfo;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,7 +30,7 @@ public class EventListActivity extends ListActivity {
 	private static String fromPage = "";
 	private int year = -1;
 	private int month = -1;
-	private int archived = 0;
+//	private int archived = 0;
 //	private int date = -1;
 
 	@Override
@@ -46,7 +48,7 @@ public class EventListActivity extends ListActivity {
 		{
 			year = savedInstanceState.getInt(DatabaseWrapper.KEY_YEAR);
 			month = savedInstanceState.getInt(DatabaseWrapper.KEY_MONTH);
-			archived = savedInstanceState.getInt(Helper.ARCHIVED_KEY);
+//			archived = savedInstanceState.getInt(Helper.ARCHIVED_KEY);
 		}
 		setDataFromIntent();
 
@@ -64,44 +66,55 @@ public class EventListActivity extends ListActivity {
 					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
 			month = extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_MONTH)) : -1;
-			archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
-					.getString(Helper.ARCHIVED_KEY)) : 0;
+			/*archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
+					.getString(Helper.ARCHIVED_KEY)) : 0;*/
 /*			date = extras.getString(DatabaseWrapper.KEY_DATE) != null ? Integer.parseInt(extras
 					.getString(DatabaseWrapper.KEY_DATE)) : -1;*/
 		}
 	}
 
-	private void fillData() {
+	private void fillData()
+	{
 		List<Event> lst = new ArrayList<Event>(0);
 		String text = null;
 		String display = null;
 		if (Helper.MONTH_LIST_PAGE.equals(fromPage) && year != -1 && month != -1
-				&& (year != Helper.ALL && month != Helper.ALL)) {
+				&& (year != Helper.ALL && month != Helper.ALL))
+		{
 			lst = db.getAllEventsByYearMonth(year, month);
-			text = "Events during " + Helper.getMonthString(month) + ", " + year + " \n";
+			text = "Events during " + Helper.getShortMonthString(month) + ", " + year + " \n";
 			display = Helper.DISP_DATE;
-		} else if (Helper.YEAR_ALL_LIST_PAGE.equals(fromPage) && (year != -1 || year == Helper.ALL)) {
+		}
+		else if (Helper.YEAR_ALL_LIST_PAGE.equals(fromPage) && (year != -1 || year == Helper.ALL))
+		{
 			lst = db.getAllEvents();
 			text = "ALL Events \n";
 			display = Helper.DISP_YEAR_MONTH_DATE;
-		} else if (Helper.MONTH_ALL_LIST_PAGE.equals(fromPage) && year != -1 && (month != -1 || month == Helper.ALL)) {
+		}
+		else if (Helper.MONTH_ALL_LIST_PAGE.equals(fromPage) && year != -1 && (month != -1 || month == Helper.ALL))
+		{
 			lst = db.getAllEventsByYear(year);
 			text = "Events in " + year + "\n";
 			display = Helper.DISP_MONTH_DATE;
-		} else if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage) && archived == 1) {
+		}
+		else if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage)/* && archived == 1*/)
+		{
 			lst = db.getAllArchivedEvents();
 			text = "Archived Events \n";
 			display = Helper.DISP_YEAR_MONTH_DATE;
-		} else {
+		}
+		else
+		{
 			Calendar cal = Calendar.getInstance();
 			lst = db.getAllEventsByMonthDate(cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-			text = "Events today - " + cal.get(Calendar.DATE) + " " + Helper.getMonthString(cal.get(Calendar.MONTH))
+			text = "Events today - " + cal.get(Calendar.DATE) + " " + Helper.getShortMonthString(cal.get(Calendar.MONTH))
 					+ "\n";
 			display = Helper.DISP_YEAR;
 		}
 		// populateDummyData(lst);
 
-		if (text != null) {
+		if (text != null)
+		{
 			((TextView) findViewById(R.id.eventstoday)).setText(text);
 		}
 		// if (lst != null && lst.size() > 0) {
@@ -110,6 +123,146 @@ public class EventListActivity extends ListActivity {
 
 		setListAdapter(adapter);
 		// }
+		getListView().setSelector(R.drawable.rewind_edit_menu_selector);
+		getListView().setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		getListView().setMultiChoiceModeListener(new MultiChoiceModeListener() {
+
+			private Set<Long> ids = new HashSet<Long>();
+
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu)
+			{
+				// once on initial creation
+				MenuInflater inflater = getMenuInflater();
+				if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage))
+				{
+					inflater.inflate(R.menu.multisel_unarchive_menu, menu);
+
+				}
+				else
+				{
+					inflater.inflate(R.menu.multisel_archive_menu, menu);
+				}
+				mode.setTitle("Select events");
+				return true;
+			}
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item)
+			{
+				// any time a contextual action button is clicked
+				switch (item.getItemId()) {
+	            case R.id.deleteevent:
+	            	deleteEvents();
+	                mode.finish();
+	                break;
+	            case R.id.archiveevent:
+	            	toggleArchiveEvents(true);
+	                mode.finish();
+	                break; 
+	            case R.id.unarchiveevent:
+	            	toggleArchiveEvents(false);
+	                mode.finish();
+	                break;    
+	            default:
+	                break;
+	            }
+				fillData();
+				return true;
+			}
+
+			private void deleteEvents()
+			{
+				long[] checkedItemIds = getListView().getCheckedItemIds();
+				checkedItemIds = new long[ids.size()];
+				int i=0;
+				for (long id: ids)
+				{
+					checkedItemIds[i] = id;
+					i++;
+				}
+				if(i > 0)
+				{
+					db.deleteEvents(checkedItemIds);
+					if(i == 1)
+					{
+						Toast.makeText(EventListActivity.this, "Deleted " + getListView().getCheckedItemCount() +
+		                        " event", Toast.LENGTH_SHORT).show();
+					}
+					else
+					{
+						Toast.makeText(EventListActivity.this, "Deleted " + getListView().getCheckedItemCount() +
+		                        " events", Toast.LENGTH_SHORT).show();
+					}
+				}
+			}
+			
+			
+			private void toggleArchiveEvents(boolean archive)
+			{
+				long[] checkedItemIds = getListView().getCheckedItemIds();
+				checkedItemIds = new long[ids.size()];
+				int i=0;
+				for (long id: ids)
+				{
+					checkedItemIds[i] = id;
+					i++;
+				}
+				if(i > 0)
+				{
+					db.toggleArchiveEvents(checkedItemIds, archive);
+					String start = archive ? "Archived " : "Restored ";
+					String end = i == 1 ? " event" : " events";
+					Toast.makeText(EventListActivity.this, start + getListView().getCheckedItemCount() + end,
+							Toast.LENGTH_SHORT).show();
+				}
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode arg0)
+			{
+				// when the action mode is closed
+
+			}
+
+			@Override
+			public boolean onPrepareActionMode(ActionMode arg0, Menu arg1)
+			{
+				// after creation and any time the ActionMode is invalidated
+				return true;
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean checked)
+			{
+				// Called when an item is checked or unchecked during selection
+				// mode.
+//				int checkedItems = getListView().getCheckedItemCount();
+//				mode.setTitle(String.valueOf(checkedItems) + " Selected");
+
+				final int checkedCount = getListView().getCheckedItemCount();
+				switch (checkedCount) {
+				case 0:
+					mode.setSubtitle(null);
+					break;
+				case 1:
+					mode.setSubtitle("1 event selected");
+					break;
+				default:
+					mode.setSubtitle("" + checkedCount + " events selected");
+					break;
+				}
+				long itemId = getListView().getAdapter().getItemId(position); 
+				if (checked)
+				{
+					ids.add(itemId);
+				}
+				else
+				{
+					ids.remove(itemId);
+				}
+			}
+		});
 
 	}
 
@@ -133,12 +286,15 @@ public class EventListActivity extends ListActivity {
 		if (year != -1)
 		{
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
-			i.putExtra(Helper.FROM_PAGE_KEY, fromPage);
+//			i.putExtra(Helper.FROM_PAGE_KEY, fromPage);
 		}
 		if (month != -1)
 		{
 			i.putExtra(DatabaseWrapper.KEY_MONTH, String.valueOf(month));
-			i.putExtra(Helper.FROM_PAGE_KEY, fromPage);
+		}
+		if (!fromPage.equals(""))
+		{
+			i.putExtra(Helper.FROM_PAGE_KEY, fromPage); 
 		}
 		startActivityForResult(i, ACTIVITY_EDIT);
 	}
@@ -176,7 +332,7 @@ public class EventListActivity extends ListActivity {
 			return true;
 		case R.id.listarchivedevents:
 			Intent i1 = new Intent(this, EventListActivity.class);
-			i1.putExtra(Helper.ARCHIVED_KEY, String.valueOf(1));
+//			i1.putExtra(Helper.ARCHIVED_KEY, String.valueOf(1));
 			i1.putExtra(Helper.FROM_PAGE_KEY, Helper.ARCHIVED_LIST_PAGE);
 			startActivityForResult(i1, ACTIVITY_EDIT);
 //			startActivity(i1);
@@ -188,7 +344,7 @@ public class EventListActivity extends ListActivity {
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
-
+	
 	private void createEvent() {
 		Intent i = new Intent(this, EventEditActivity.class);
 		i.putExtra(Helper.FROM_PAGE_KEY, Helper.MONTH_LIST_PAGE);
@@ -224,12 +380,12 @@ public class EventListActivity extends ListActivity {
 			outState.putInt(DatabaseWrapper.KEY_MONTH, month);
 
 		}
-		if (archived != 0) {
+		/*if (archived != 0) {
 			outState.putInt(Helper.ARCHIVED_KEY, archived);
-		}
+		}*/
 	}
 
-	@Override
+	/*@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.deleteevent:
@@ -248,7 +404,7 @@ public class EventListActivity extends ListActivity {
 			return true;
 		}
 		return super.onContextItemSelected(item);
-	}
+	}*/
 
 	@Override
 	public void onBackPressed()
@@ -286,7 +442,20 @@ public class EventListActivity extends ListActivity {
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(Helper.ALL));
 			setResult(RESULT_OK, i);
 			finish();
-		}/*else
+		}else if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage))
+		{
+			fromPage = "";
+			Intent i = new Intent(this, EventListActivity.class);
+			setResult(RESULT_OK, i);
+			finish();
+		}else if(fromPage.equals(""))
+		{
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
+		}
+		/*else
 		{
 			Log.i("HA", "Finishing");
 			Intent intent = new Intent(Intent.ACTION_MAIN);

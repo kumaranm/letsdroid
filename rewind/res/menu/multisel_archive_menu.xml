@@ -3,9 +3,11 @@
 
     <item
         android:id="@+id/deleteevent" 
-        android:title="@string/delete_event"/>
+        android:title="@string/delete_event"
+        android:showAsAction="always"/>
     <item
         android:id="@+id/archiveevent"
-        android:title="@string/archive_event"/>
+        android:title="@string/archive_event"
+        android:showAsAction="always"/>
  
 </menu>

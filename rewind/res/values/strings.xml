@@ -17,7 +17,7 @@
     <string name="event_capture">Capture</string>
     <string name="add_event">Record event</string>
     <string name="edit_event">Rewrite event</string>
-    <string name="delete_event">Erase event</string>
+    <string name="delete_event">Delete</string>
     <string name="settings">Settings</string>
     <string name="list_all_events">List all events</string>
     <string name="narration_title">Enter narration</string>
@@ -35,5 +35,5 @@
 	<string name="list_archived_events">List archived events</string>
 	<string name="home_event">Home</string>
 	<string name="archive_event">Archive</string>
-	<string name="unarchive_event">Un-Archive</string>
+	<string name="unarchive_event">Restore</string>
 </resources>

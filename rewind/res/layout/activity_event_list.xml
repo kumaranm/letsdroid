@@ -25,6 +25,7 @@
         android:layout_below="@id/eventstoday"
         android:fadeScrollbars="true"
         android:fastScrollEnabled="true"
+        android:choiceMode="multipleChoiceModal"
         android:scrollbars="vertical" />
 
     <!--

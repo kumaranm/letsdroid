@@ -73,7 +73,7 @@ public class MonthListActivity extends ListActivity {
 		String[] monthDisp = new String[months.length];
 		monthDisp[0] = months[0];
 		for (int i = 1; i < months.length; i++) {
-			monthDisp[i] = Helper.getMonthString(Integer.parseInt(months[i]));
+			monthDisp[i] = Helper.getLongMonthString(Integer.parseInt(months[i]));
 		}
 		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, monthDisp);
 		setListAdapter(adapter);
