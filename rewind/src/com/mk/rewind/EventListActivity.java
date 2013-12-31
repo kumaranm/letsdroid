@@ -307,12 +307,12 @@ public class EventListActivity extends ListActivity {
 		return true;
 	}
 
-	@Override
+	/*@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater mi = getMenuInflater();
-		mi.inflate(R.menu.rewind_longpress_menu, menu);
-	}
+		mi.inflate(R.menu.rewind_edit_menu, menu);
+	}*/
 
 	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
@@ -355,16 +355,6 @@ public class EventListActivity extends ListActivity {
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
 		super.onActivityResult(requestCode, resultCode, intent);
 		// Reload the list here
-		/*if (intent != null && intent.getExtras() != null)
-		{
-			Bundle extras = intent.getExtras();
-			year = extras.getString(DatabaseWrapper.KEY_YEAR) != null ? Integer.parseInt(extras
-					.getString(DatabaseWrapper.KEY_YEAR)) : -1;
-			month = extras.getString(DatabaseWrapper.KEY_MONTH) != null ? Integer.parseInt(extras
-					.getString(DatabaseWrapper.KEY_MONTH)) : -1;
-			archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
-					.getString(Helper.ARCHIVED_KEY)) : 0;
-		}*/
 		setIntent(intent);
 		setDataFromIntent(); 
 		fillData();

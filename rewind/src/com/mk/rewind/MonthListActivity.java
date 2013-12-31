@@ -126,12 +126,12 @@ public class MonthListActivity extends ListActivity {
 	 * getMenuInflater().inflate(R.menu.rewind_menu, menu); return true; }
 	 */
 
-	@Override
+	/*@Override
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		super.onCreateContextMenu(menu, v, menuInfo);
 		MenuInflater mi = getMenuInflater();
-		mi.inflate(R.menu.rewind_longpress_menu, menu);
-	}
+		mi.inflate(R.menu.rewind_edit_menu, menu);
+	}*/
 
 	/*
 	 * @Override public boolean onMenuItemSelected(int featureId, MenuItem item)
@@ -156,7 +156,7 @@ public class MonthListActivity extends ListActivity {
 		}
 	}
 
-	@Override
+	/*@Override
 	public boolean onContextItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.deleteevent:
@@ -167,15 +167,15 @@ public class MonthListActivity extends ListActivity {
 			text.show();
 			fillData();
 			return true;
-			/*
+			
 			 * case R.id.editevent: Intent i = new Intent(this,
 			 * EventEditActivity.class); AdapterContextMenuInfo info1 =
 			 * (AdapterContextMenuInfo) item.getMenuInfo();
 			 * i.putExtra(DatabaseWrapper.KEY_ROWID, info1.id);
 			 * startActivityForResult(i, ACTIVITY_EDIT); return true;
-			 */
+			 
 		}
 		return super.onContextItemSelected(item);
-	}
+	}*/
 
 }

@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -24,8 +25,8 @@ public class EventEditActivity extends Activity {
 	private Button dateButton;
 	private EditText narrationText;
 	private EditText locationText;
-	private Button captureButton;
-	private Button discardButton;
+//	private Button captureButton;
+//	private Button discardButton;
 	private Calendar calendar;
 	private static final int DATE_PICKER_DIALOG = 0;
 	private static final int CONFIRM_CAPTURE_DIALOG = 1;
@@ -49,8 +50,8 @@ public class EventEditActivity extends Activity {
 		narrationText = (EditText) findViewById(R.id.narrationtext);
 		locationText = (EditText) findViewById(R.id.locationtext);
 		dateButton = (Button) findViewById(R.id.datebutton);
-		discardButton = (Button) findViewById(R.id.discardbutton);
-		captureButton = (Button) findViewById(R.id.capturebutton);
+//		discardButton = (Button) findViewById(R.id.discardbutton);
+//		captureButton = (Button) findViewById(R.id.capturebutton);
 
 		rowId = savedInstanceState != null ? savedInstanceState.getLong(DatabaseWrapper.KEY_ROWID) : null;
 
@@ -83,8 +84,8 @@ public class EventEditActivity extends Activity {
 			Event event = db.getEvent(rowId);
 			narrationText.setText(event.getNarration());
 			locationText.setText(event.getLocation());
-			discardButton.setText(R.string.event_cancel);
-			captureButton.setText(R.string.event_update);
+//			discardButton.setText(R.string.event_cancel);
+//			captureButton.setText(R.string.event_update);
 			SimpleDateFormat dateTimeFormat = new SimpleDateFormat(DATE_TIME_FORMAT);
 			Date date = null;
 
@@ -137,7 +138,7 @@ public class EventEditActivity extends Activity {
 		});
 		updateDateButtonText();
 
-		discardButton.setOnClickListener(new View.OnClickListener() {
+		/*discardButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View arg0) {
@@ -152,7 +153,7 @@ public class EventEditActivity extends Activity {
 				showDialog(CONFIRM_CAPTURE_DIALOG);
 
 			}
-		});
+		});*/
 	}
 
 	@Override
@@ -255,7 +256,7 @@ public class EventEditActivity extends Activity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-//		 getMenuInflater().inflate(R.menu.rewind_edit_menu, menu);
+		 getMenuInflater().inflate(R.menu.rewind_edit_menu, menu);
 		return true;
 	}
 
@@ -279,30 +280,16 @@ public class EventEditActivity extends Activity {
 		super.onStart();
 	}
 	
-	/*@Override
+	@Override
 	public boolean onMenuItemSelected(int featureId, MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.deleteevent:
-			if(rowId != null)
-			{
-				db.deleteEvent(rowId);
-				setResult(RESULT_OK);
-				Toast.makeText(this, R.string.delete_event, Toast.LENGTH_SHORT).show();
-//				setContentView(R.layout.activity_event_list);
-				finish();
-			}
+		case R.id.discardbutton:
+			showDialog(CONFIRM_DISCARD_DIALOG);
 			return true;
-		case R.id.archiveevent:
-			if(rowId != null)
-			{
-				db.archiveEvent(rowId);
-				setResult(RESULT_OK);
-				Toast.makeText(this, "Event archived", Toast.LENGTH_SHORT).show();
-//				setContentView(R.layout.activity_event_list);
-				finish();
-			}
+		case R.id.capturebutton:
+			showDialog(CONFIRM_CAPTURE_DIALOG);
 			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
-	}*/
+	}
 }
