@@ -71,7 +71,8 @@ public class EventEditActivity extends Activity {
 			Bundle extras = getIntent().getExtras();
 			if(rowId == null)
 			{
-				rowId = extras != null ? extras.getLong(DatabaseWrapper.KEY_ROWID) : null;
+				rowId = extras.getString(DatabaseWrapper.KEY_ROWID) != null ? Long.parseLong(extras
+						.getString(DatabaseWrapper.KEY_ROWID)) : null;
 			}
 			fromPage = extras.getString(Helper.FROM_PAGE_KEY) != null ? extras.getString(Helper.FROM_PAGE_KEY) : "";
 		}

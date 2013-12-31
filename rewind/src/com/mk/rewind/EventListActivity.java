@@ -7,6 +7,7 @@ import java.util.List;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.view.Menu;
@@ -28,6 +29,7 @@ public class EventListActivity extends ListActivity {
 	private int year = -1;
 	private int month = -1;
 	private int archived = 0;
+//	private int date = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +66,8 @@ public class EventListActivity extends ListActivity {
 					.getString(DatabaseWrapper.KEY_MONTH)) : -1;
 			archived = extras.getString(Helper.ARCHIVED_KEY) != null ? Integer.parseInt(extras
 					.getString(Helper.ARCHIVED_KEY)) : 0;
+/*			date = extras.getString(DatabaseWrapper.KEY_DATE) != null ? Integer.parseInt(extras
+					.getString(DatabaseWrapper.KEY_DATE)) : -1;*/
 		}
 	}
 
@@ -125,7 +129,7 @@ public class EventListActivity extends ListActivity {
 		super.onListItemClick(l, v, position, id);
 
 		Intent i = new Intent(this, EventEditActivity.class);
-		i.putExtra(DatabaseWrapper.KEY_ROWID, id); 
+		i.putExtra(DatabaseWrapper.KEY_ROWID, String.valueOf(id)); 
 		if (year != -1)
 		{
 			i.putExtra(DatabaseWrapper.KEY_YEAR, String.valueOf(year));
@@ -159,19 +163,18 @@ public class EventListActivity extends ListActivity {
 		switch (item.getItemId()) {
 		case R.id.homeevent:
 			Intent i2 = new Intent(this, EventListActivity.class);
-			fromPage = "";
+			i2.putExtra(Helper.FROM_PAGE_KEY, "");
 			startActivity(i2);
 			return true;
 		case R.id.addevent:
 			createEvent();
 			return true;
 		case R.id.listallevents:
-			Intent i = new Intent(this, YearListActivity.class);
 			fromPage = "";
+			Intent i = new Intent(this, YearListActivity.class);
 			startActivityForResult(i, ACTIVITY_EDIT);
 			return true;
 		case R.id.listarchivedevents:
-			fromPage = "";
 			Intent i1 = new Intent(this, EventListActivity.class);
 			i1.putExtra(Helper.ARCHIVED_KEY, String.valueOf(1));
 			i1.putExtra(Helper.FROM_PAGE_KEY, Helper.ARCHIVED_LIST_PAGE);
@@ -187,8 +190,8 @@ public class EventListActivity extends ListActivity {
 	}
 
 	private void createEvent() {
-		fromPage = "";
 		Intent i = new Intent(this, EventEditActivity.class);
+		i.putExtra(Helper.FROM_PAGE_KEY, Helper.MONTH_LIST_PAGE);
 		startActivityForResult(i, ACTIVITY_CREATE);
 	}
 
@@ -285,8 +288,11 @@ public class EventListActivity extends ListActivity {
 			finish();
 		}/*else
 		{
-			Intent i = new Intent(this, YearListActivity.class);
-			startActivity(i);
+			Log.i("HA", "Finishing");
+			Intent intent = new Intent(Intent.ACTION_MAIN);
+			intent.addCategory(Intent.CATEGORY_HOME);
+			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+			startActivity(intent);
 		}*/
 	}
 }
