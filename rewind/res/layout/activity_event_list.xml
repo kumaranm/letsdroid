@@ -14,7 +14,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:paddingBottom="2dp"
+        android:paddingBottom="8dp"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ListView
@@ -26,6 +26,7 @@
         android:fadeScrollbars="true"
         android:fastScrollEnabled="true"
         android:choiceMode="multipleChoiceModal"
+        android:listSelector="@android:color/holo_blue_bright"
         android:scrollbars="vertical" />
 
     <!--

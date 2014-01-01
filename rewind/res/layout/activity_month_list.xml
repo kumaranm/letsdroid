@@ -22,12 +22,11 @@
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:fastScrollEnabled="true"
         android:layout_below="@id/monthlisttitle"
         android:scrollbars="vertical"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:background="@drawable/white_bk1"
         android:fadeScrollbars="true"/>
 
 </RelativeLayout>
