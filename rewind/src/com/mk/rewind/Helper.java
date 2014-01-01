@@ -38,6 +38,15 @@ public class Helper
 		return MONTHS_LONG[month];
 	}
 
+	public static String getPaddedDateString(int date)
+	{
+		if (date < 10)
+		{
+			return String.valueOf("0" + date);
+		}
+		return String.valueOf(date);
+	}
+	
 	public static String convertToString(long[] ids)
 	{
 		StringBuilder str = new StringBuilder("");

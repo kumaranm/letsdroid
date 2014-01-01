@@ -74,39 +74,45 @@ public class EventListActivity extends ListActivity {
 	private void fillData()
 	{
 		List<Event> lst = new ArrayList<Event>(0);
+		long count = 0;
 		String text = null;
 		String display = null;
 		if (Helper.ARCHIVED_LIST_PAGE.equals(fromPage)/* && archived == 1*/)
 		{
 			lst = db.getAllArchivedEvents();
-			text = "Archived Events \n";
+			count = db.getAllArchivedEventsCount();
+			text = "Archived Events (" + count + ")";
 			display = Helper.DISP_YEAR_MONTH_DATE;
 		}
 		else if ((Helper.MONTH_LIST_PAGE.equals(fromPage) || Helper.NEW_EVENT_PAGE.equals(fromPage) ) && year != -1 && month != -1
 				&& (year != Helper.ALL && month != Helper.ALL))
 		{
 			lst = db.getAllEventsByYearMonth(year, month);
-			text = "Events during " + Helper.getShortMonthString(month) + ", " + year + " \n";
+			count = db.getAllEventsByYearMonthCount(year, month);
+			text = "... during " + Helper.getLongMonthString(month) + ", " + year + " (" + count + ")";
 			display = Helper.DISP_DATE;
 		}
 		else if (Helper.YEAR_ALL_LIST_PAGE.equals(fromPage) && (year != -1 || year == Helper.ALL))
 		{
 			lst = db.getAllEvents();
-			text = "ALL Events \n";
+			count = db.getAllEventsCount();
+			text = "ALL Events (" + count + ")";
 			display = Helper.DISP_YEAR_MONTH_DATE;
 		}
 		else if (Helper.MONTH_ALL_LIST_PAGE.equals(fromPage) && year != -1 && (month != -1 || month == Helper.ALL))
 		{
 			lst = db.getAllEventsByYear(year);
-			text = "Events in " + year + "\n";
+			count = db.getAllEventsByYearCount(year);
+			text = "... in " + year + " (" + count + ")";
 			display = Helper.DISP_MONTH_DATE;
 		}
 		else
 		{
 			Calendar cal = Calendar.getInstance();
 			lst = db.getAllEventsByMonthDate(cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
-			text = "Events today - " + cal.get(Calendar.DATE) + " " + Helper.getShortMonthString(cal.get(Calendar.MONTH))
-					+ "\n";
+			count = db.getAllEventsByMonthDateCount(cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+			text = "On this day " + Helper.getPaddedDateString(cal.get(Calendar.DATE)) + " "
+					+ Helper.getLongMonthString(cal.get(Calendar.MONTH)) + " (" + count + ") ";
 			display = Helper.DISP_YEAR;
 		}
 		// populateDummyData(lst);

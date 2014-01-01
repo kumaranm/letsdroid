@@ -296,6 +296,6 @@ public class EventEditActivity extends Activity {
 	@Override
 	public void onBackPressed()
 	{
-		
+		showConfirmDiscard();
 	}
 }

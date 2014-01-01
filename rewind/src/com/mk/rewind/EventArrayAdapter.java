@@ -58,7 +58,7 @@ public class EventArrayAdapter extends BaseAdapter {
 		}
 
 		String str = String.valueOf(entry.getYear()) + "\n" + Helper.getShortMonthString(cal.get(Calendar.MONTH)) + "\n"
-				+ String.valueOf(entry.getDate());
+				+ Helper.getPaddedDateString(entry.getDate());
 		// year.setText(String.valueOf(entry.getYear()));
 
 		if (display.equals(Helper.DISP_YEAR)) {
@@ -66,9 +66,9 @@ public class EventArrayAdapter extends BaseAdapter {
 		} else if (display.equals(Helper.DISP_YEAR_MONTH)) {
 			str = String.valueOf(entry.getYear()) + "\n" + Helper.getShortMonthString(cal.get(Calendar.MONTH));
 		} else if (display.equals(Helper.DISP_MONTH_DATE)) {
-			str = Helper.getShortMonthString(cal.get(Calendar.MONTH)) + "\n" + String.valueOf(entry.getDate());
+			str = Helper.getShortMonthString(cal.get(Calendar.MONTH)) + "\n" + Helper.getPaddedDateString(entry.getDate());
 		} else if (display.equals(Helper.DISP_DATE)) {
-			str = String.valueOf(entry.getDate());
+			str = Helper.getPaddedDateString(entry.getDate());
 		}
 		year.setText(str);
 

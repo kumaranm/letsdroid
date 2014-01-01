@@ -15,6 +15,9 @@ public class EventOperations {
 	private DatabaseWrapper dbHelper;
 	private static final int UNARCHIVED = 0;
 	private static final int ARCHIVED = 1;
+	private static final String COUNT_QUERY = "select count(1) as CNT from " + DatabaseWrapper.DATABASE_TABLE
+			+ " where ";
+	private static final String CNT = "CNT";
 
 	private String[] TABLE_COLUMNS = { DatabaseWrapper.KEY_ROWID, DatabaseWrapper.KEY_NARRATION,
 			DatabaseWrapper.KEY_LOCATION, DatabaseWrapper.KEY_DATE_TIME, DatabaseWrapper.KEY_DATE,
@@ -122,6 +125,11 @@ public class EventOperations {
 	 * eventList; }
 	 */
 
+	public long getAllEventsCount() 
+	{
+		return getCount(DatabaseWrapper.KEY_ARCHIVED + "=" + UNARCHIVED);
+	}
+	
 	public List<Event> getAllEvents() {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
@@ -139,6 +147,12 @@ public class EventOperations {
 		return eventList;
 	}
 
+	public long getAllEventsByYearCount(int year) 
+	{
+		return getCount(DatabaseWrapper.KEY_ARCHIVED + "=" + UNARCHIVED + " AND " + DatabaseWrapper.KEY_YEAR + "="
+				+ year);
+	}
+	
 	public List<Event> getAllEventsByYear(int year) {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
@@ -156,6 +170,12 @@ public class EventOperations {
 		return eventList;
 	}
 
+	public long getAllEventsByYearMonthCount(int year, int month) 
+	{
+		return getCount(DatabaseWrapper.KEY_ARCHIVED + "=" + UNARCHIVED + " AND "
+				+ DatabaseWrapper.KEY_YEAR + "=" + year + " AND " + DatabaseWrapper.KEY_MONTH + "=" + month);
+	}
+	
 	public List<Event> getAllEventsByYearMonth(int year, int month) {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
@@ -173,6 +193,12 @@ public class EventOperations {
 		return eventList;
 	}
 
+	public long getAllEventsByMonthDateCount(int month, int date) 
+	{
+		return getCount(DatabaseWrapper.KEY_ARCHIVED + "=" + UNARCHIVED + " AND "
+				+ DatabaseWrapper.KEY_DATE + "=" + date + " AND " + DatabaseWrapper.KEY_MONTH + "=" + month);
+	}
+	
 	public List<Event> getAllEventsByMonthDate(int month, int date) {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
@@ -190,6 +216,11 @@ public class EventOperations {
 		return eventList;
 	}
 
+	public long getAllArchivedEventsCount() 
+	{
+		return getCount(DatabaseWrapper.KEY_ARCHIVED + "=" + ARCHIVED);
+	}
+	
 	public List<Event> getAllArchivedEvents() {
 		List<Event> eventList = new ArrayList<Event>(0);
 		Cursor cursor = db.query(DatabaseWrapper.DATABASE_TABLE, TABLE_COLUMNS, DatabaseWrapper.KEY_ARCHIVED + "="
@@ -225,6 +256,25 @@ public class EventOperations {
 		}
 		cursor.close();
 		return years;
+	}
+	
+	public long getAllEventsByMonthCount(int month) 
+	{
+		return getCount(DatabaseWrapper.KEY_ARCHIVED + "=" + UNARCHIVED + " AND " + DatabaseWrapper.KEY_MONTH + " = "
+				+ month);
+	}
+	
+	private long getCount(String whereClause)
+	{
+		long cnt = 0;
+		Cursor cursor = db.rawQuery(COUNT_QUERY + whereClause, null);
+		if (cursor.getCount() > 0)
+		{
+			cursor.moveToFirst();
+			cnt = cursor.getLong(cursor.getColumnIndex(CNT));
+		}
+		cursor.close();
+		return cnt;
 	}
 
 	public String[] getMonths(int year) {

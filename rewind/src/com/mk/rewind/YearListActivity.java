@@ -33,17 +33,26 @@ public class YearListActivity extends ListActivity {
 		fillData();
 	}
 
-	private void fillData() {
-		Calendar cal = Calendar.getInstance();
-
+	private void fillData()
+	{
 		years = db.getYears();
 
 		// populateDummyData(lst);
-		if (years == null) {
+		if (years == null)
+		{
 			years = new String[0];
 		}
 		years[0] = getString(R.string.all_years);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, years);
+
+		String[] yearsDisp = new String[years.length];
+		yearsDisp[0] = years[0];
+		yearsDisp[0] += " (" + db.getAllEventsCount() + ")";
+		for (int i = 1; i < years.length; i++)
+		{
+			yearsDisp[i] = years[i];
+			yearsDisp[i] += " (" + db.getAllEventsByYearCount(Integer.parseInt(years[i])) + ")";
+		}
+		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.year_row, R.id.eventtext, yearsDisp);
 		setListAdapter(adapter);
 	}
 
