@@ -237,7 +237,12 @@ public class EventEditActivity extends Activity {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						setResult(RESULT_OK);
-						Toast.makeText(EventEditActivity.this, "Event discarded", Toast.LENGTH_SHORT).show();
+						String message = "Event not updated";
+						if (rowId == null)
+						{
+							message = "Event discarded";
+						}
+						Toast.makeText(EventEditActivity.this, message, Toast.LENGTH_SHORT).show();
 						setContentView(R.layout.activity_event_list);
 						finish();
 					}

@@ -20,13 +20,16 @@
     <ListView
         android:id="@+id/android:list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@id/eventstoday"
+        android:background="@drawable/rewind_edit_menu_selector"
+        android:drawSelectorOnTop="true"
+        android:dividerHeight="3dp"
+        android:divider="#f8f8f8"
         android:fadeScrollbars="true"
         android:fastScrollEnabled="true"
         android:choiceMode="multipleChoiceModal"
-        android:listSelector="@android:color/holo_blue_bright"
         android:scrollbars="vertical" />
 
     <!--
