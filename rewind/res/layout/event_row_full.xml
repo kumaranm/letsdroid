@@ -9,12 +9,13 @@
     <TextView
         android:id="@+id/year"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="fill_parent"
         android:layout_alignParentTop="true"
         android:hint="@string/row_year_hint"
         android:minLines="3"
         android:paddingLeft="10dip"
         android:paddingTop="5dip"
+        android:gravity="top"
         android:textAlignment="gravity"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 

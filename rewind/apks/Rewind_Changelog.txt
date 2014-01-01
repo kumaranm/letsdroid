@@ -1,0 +1,13 @@
+v1.1
+some alignment fixes
+background image change
+
+
+v1.0
+todays events 
+all events with counts 
+filter by year and month
+add new event, update event
+multi select delete and archive
+archived event list and restore
+no FCs
