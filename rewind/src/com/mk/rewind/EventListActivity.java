@@ -339,9 +339,9 @@ public class EventListActivity extends ListActivity {
 //			startActivity(i1);
 			return true;
 		case R.id.settings:
-			// Intent i = new Intent(this, TaskPreferences.class);
-			// startActivity(i);
-			// return true;
+			Intent i3 = new Intent(this, EventSettingActivity.class);
+			startActivity(i3);
+			return true;
 		}
 		return super.onMenuItemSelected(featureId, item);
 	}
