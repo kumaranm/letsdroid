@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="Settings" >
+
+    <PreferenceCategory android:title="Backup Database" >
+        <TextViewPreference
+            android:dialogTitle="Backup database"
+            android:key="backupdb"
+            android:summary="Backups the data to /sdcard/rewind/backup/"
+            android:title="Back UP DB" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

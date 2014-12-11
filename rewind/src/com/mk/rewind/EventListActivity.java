@@ -6,7 +6,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.ActionMode;
@@ -16,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -73,6 +77,7 @@ public class EventListActivity extends ListActivity {
 
 	private void fillData()
 	{
+		boolean showBack = false;
 		List<Event> lst = new ArrayList<Event>(0);
 		long count = 0;
 		String text = null;
@@ -83,6 +88,7 @@ public class EventListActivity extends ListActivity {
 			count = db.getAllArchivedEventsCount();
 			text = "Archived Events (" + count + ")";
 			display = Helper.DISP_YEAR_MONTH_DATE;
+			showBack = true;
 		}
 		else if ((Helper.MONTH_LIST_PAGE.equals(fromPage) || Helper.NEW_EVENT_PAGE.equals(fromPage) ) && year != -1 && month != -1
 				&& (year != Helper.ALL && month != Helper.ALL))
@@ -91,6 +97,7 @@ public class EventListActivity extends ListActivity {
 			count = db.getAllEventsByYearMonthCount(year, month);
 			text = "... during " + Helper.getLongMonthString(month) + ", " + year + " (" + count + ")";
 			display = Helper.DISP_DATE;
+			showBack = true;
 		}
 		else if (Helper.YEAR_ALL_LIST_PAGE.equals(fromPage) && (year != -1 || year == Helper.ALL))
 		{
@@ -98,6 +105,7 @@ public class EventListActivity extends ListActivity {
 			count = db.getAllEventsCount();
 			text = "ALL Events (" + count + ")";
 			display = Helper.DISP_YEAR_MONTH_DATE;
+			showBack = true;
 		}
 		else if (Helper.MONTH_ALL_LIST_PAGE.equals(fromPage) && year != -1 && (month != -1 || month == Helper.ALL))
 		{
@@ -105,6 +113,7 @@ public class EventListActivity extends ListActivity {
 			count = db.getAllEventsByYearCount(year);
 			text = "... in " + year + " (" + count + ")";
 			display = Helper.DISP_MONTH_DATE;
+			showBack = true;
 		}
 		else
 		{
@@ -114,9 +123,17 @@ public class EventListActivity extends ListActivity {
 			text = "On this day " + Helper.getPaddedDateString(cal.get(Calendar.DATE)) + " "
 					+ Helper.getLongMonthString(cal.get(Calendar.MONTH)) + " (" + count + ") ";
 			display = Helper.DISP_YEAR;
+			showBack = true;
 		}
 		// populateDummyData(lst);
-
+		if(showBack)
+		{
+			 // get action bar   
+	        ActionBar actionBar = getActionBar();
+	        // Enabling Up / Back navigation
+	        actionBar.setDisplayHomeAsUpEnabled(true);
+		}
+		
 		if (text != null)
 		{
 			((TextView) findViewById(R.id.eventstoday)).setText(text);
@@ -303,9 +320,17 @@ public class EventListActivity extends ListActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		super.onCreateOptionsMenu(menu);
+//		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.rewind_menu, menu);
-		return true;
+		
+		// Associate searchable configuration with the SearchView
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView = (SearchView) menu.findItem(R.id.searchevent)
+                .getActionView();
+        searchView.setSearchableInfo(searchManager
+                .getSearchableInfo(getComponentName()));
+		
+		return super.onCreateOptionsMenu(menu);
 	}
 
 	/*@Override

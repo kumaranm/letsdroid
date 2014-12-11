@@ -10,7 +10,8 @@
         android:id="@+id/searchevent"
         android:showAsAction="always"
         android:icon="@android:drawable/ic_menu_search"
-        android:title="@string/search_event"/>
+        android:title="@string/search_event"
+        android:actionViewClass="android.widget.SearchView"/>
     <item
         android:id="@+id/addevent"
         android:showAsAction="always"

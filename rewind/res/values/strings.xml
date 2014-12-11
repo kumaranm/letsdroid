@@ -37,4 +37,5 @@
 	<string name="archive_event">Archive</string>
 	<string name="unarchive_event">Restore</string>
 	<string name="search_event">Search</string>
+	<string name="search_hint">Search events</string>
 </resources>
